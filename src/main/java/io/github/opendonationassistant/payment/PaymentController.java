@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
-@Controller("/payments")
+@Controller
 public class PaymentController {
 
   private final PaymentRepository payments;
@@ -25,7 +25,7 @@ public class PaymentController {
     this.payments = payments;
   }
 
-  @Get
+  @Get("/payments/")
   @Secured(SecurityRule.IS_AUTHENTICATED)
   public HttpResponse<List<Payment>> list(
     @NonNull Authentication auth,
@@ -45,7 +45,7 @@ public class PaymentController {
     return HttpResponse.ok(page);
   }
 
-  @Get("{id}")
+  @Get("/payments/{id}")
   @Secured(SecurityRule.IS_ANONYMOUS)
   public HttpResponse<Payment> get(@PathVariable("id") String id) {
     return payments

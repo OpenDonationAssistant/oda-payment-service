@@ -27,7 +27,7 @@ public class PaymentCommandController {
     this.gatewayProvider = gatewayProvider;
   }
 
-  @Put("/commands/payment/create")
+  @Put("/payments/commands/create")
   @Secured(SecurityRule.IS_ANONYMOUS)
   public CompletableFuture<InitedPayment> createDraft(
     @Body CreatePaymentCommand command
@@ -35,7 +35,7 @@ public class PaymentCommandController {
     return command.execute(gatewayProvider);
   }
 
-  @Put("/commands/payment/complete")
+  @Put("/payments/commands/complete")
   @Secured(SecurityRule.IS_ANONYMOUS)
   public CompletableFuture<CompletedPayment> complete(
     @Body CompletePaymentCommand command
