@@ -1,0 +1,32 @@
+micronaut:
+  application:
+    name: oda-payment-service
+  security:
+    authentication: bearer
+    token:
+      bearer:
+        enabled: true
+      cookie:
+        enabled: true
+      jwt:
+        signatures:
+          jwks:
+            keycloak:
+              url: https://auth.oda.digital/realms/ODA/protocol/openid-connect/certs
+  http.services.yoomoney.url: https://api.yookassa.ru
+  http.services.fundraising:
+    url: https://yoomoney.ru
+    follow-redirects: false
+  http.services.robokassa.url: https://auth.robokassa.ru
+endpoints:
+  flyway:
+    enabled: true
+flyway:
+  datasources:
+    default:
+      enabled: true
+      baseline-on-migrate: true
+jpa:
+  default:
+    entity-scan:
+        packages: 'io.github.opendonationassistant'
