@@ -1,5 +1,7 @@
 package io.github.opendonationassistant.payment;
 
+import io.github.opendonationassistant.recipient.GatewayCredentialsData;
+import io.github.opendonationassistant.recipient.GatewayCredentialsDataRepository;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
@@ -13,16 +15,22 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 
 @Controller
 public class PaymentController {
 
   private final PaymentRepository payments;
+  private final GatewayCredentialsDataRepository credentialsRepository;
 
   @Inject
-  public PaymentController(PaymentRepository payments) {
+  public PaymentController(
+    PaymentRepository payments,
+    GatewayCredentialsDataRepository credentialsRepository
+  ) {
     this.payments = payments;
+    this.credentialsRepository = credentialsRepository;
   }
 
   @Get("/payments/")
@@ -31,12 +39,16 @@ public class PaymentController {
     @NonNull Authentication auth,
     @Nullable @QueryValue("statuses") String statuses
   ) {
+    final Optional<String> ownerId = getOwnerId(auth);
+    if (ownerId.isEmpty()) {
+      return HttpResponse.unauthorized();
+    }
     List<String> statusFilter = StringUtils.isNotEmpty(statuses)
       ? Arrays.asList(statuses.split(","))
       : Arrays.asList("completed");
     List<Payment> completedPayments =
       payments.getByRecipientIdAndStatusInOrderByAuthorizationTimestampDesc(
-        getOwnerId(auth),
+        ownerId.get(),
         statusFilter
       );
     var page = completedPayments.size() > 10
@@ -54,9 +66,25 @@ public class PaymentController {
       .orElse(HttpResponse.notFound());
   }
 
-  private String getOwnerId(Authentication auth) {
-    return String.valueOf(
-      auth.getAttributes().getOrDefault("preferred_username", "")
+  @Get("/payments/gateways")
+  @Secured(SecurityRule.IS_ANONYMOUS)
+  public HttpResponse<List<GatewayData>> listGateways(
+    @QueryValue("recipientId") String recipientId
+  ) {
+    return HttpResponse.ok(
+      credentialsRepository
+        .findByRecipient(recipientId)
+        .stream()
+        .map(GatewayCredentialsData::asGatewayData)
+        .toList()
     );
+  }
+
+  public static record GatewayData(String id, String type, Boolean enabled) {}
+
+  private Optional<String> getOwnerId(Authentication auth) {
+    return Optional.ofNullable(
+      auth.getAttributes().get("preferred_username")
+    ).map(String::valueOf);
   }
 }

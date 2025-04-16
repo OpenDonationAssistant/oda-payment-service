@@ -1,0 +1,7 @@
+{
+  "npmName": "@opendonationassistant/oda-news-service-client",
+  "npmVersion": "0.2.0",
+  "npmRepository" : "https://npm.pkg.github.com",
+  "snapshot" : false,
+  "supportsES6": true
+}

@@ -14,6 +14,7 @@ micronaut:
             keycloak:
               url: https://auth.oda.digital/realms/ODA/protocol/openid-connect/certs
   http.services.yoomoney.url: https://api.yookassa.ru
+  http.services.cryptocloud.url: https://api.cryptocloud.plus
   http.services.fundraising:
     url: https://yoomoney.ru
     follow-redirects: false
@@ -29,4 +30,4 @@ flyway:
 jpa:
   default:
     entity-scan:
-        packages: 'io.github.opendonationassistant'
+      packages: "io.github.opendonationassistant"

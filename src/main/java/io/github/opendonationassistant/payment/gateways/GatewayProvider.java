@@ -32,17 +32,19 @@ public class GatewayProvider {
   }
 
   public Gateway get(String recipientId) {
-    var credentials  = credentialsProvider.findByRecipient(recipientId);
+    var credentials = credentialsProvider.findByRecipient(recipientId);
     if (credentials.size() < 1) {
       throw new RuntimeException("No credentials for recipient " + recipientId);
     }
     var cred = credentials.get(0);
     String shopId = cred.getGatewayId();
     String shopToken = cred.getToken();
-    switch (cred.getGateway()) {
-      case "robokassa":
+    switch (Gateway.Type.from(cred.getGateway())) {
+      case ROBOKASSA:
         return new Robokassa(robokassaClient, shopId, shopToken);
-      case "yoomoney":
+      case CRYPTOCLOUD:
+        return new Robokassa(robokassaClient, shopId, shopToken);
+      case YOOMONEY:
         return new io.github.opendonationassistant.payment.gateways.YooMoney(
           shopId,
           recipientId,

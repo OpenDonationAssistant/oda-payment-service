@@ -119,9 +119,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-database-postgresql</artifactId>
-        <scope>runtime</scope>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.micronaut.sql</groupId>
@@ -222,6 +222,27 @@
             <arg>-Amicronaut.processing.module=oda-payment-service</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>7.2.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/target/classes/META-INF/swagger/oda-payment-service-${version}.yml</inputSpec>
+              <generatorName>typescript-axios</generatorName>
+              <configurationFile>openapi-config.json</configurationFile>
+              <configOptions>
+                <output>${project.build.directory}/</output>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
