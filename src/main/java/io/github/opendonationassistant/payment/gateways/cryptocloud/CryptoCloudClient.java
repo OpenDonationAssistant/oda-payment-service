@@ -6,6 +6,8 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
+import io.micronaut.serde.annotation.Serdeable;
+
 import java.util.concurrent.CompletableFuture;
 
 @Client(id = "cryptocloud")
@@ -17,13 +19,16 @@ public interface CryptoCloudClient {
     @Body CryptoCloudInvoiceRequest request
   );
 
+  @Serdeable
   public static record CryptoCloudInvoiceRequest(
     String shop_id,
     double amount
   ) {}
 
+  @Serdeable
   public static record CryptoCloudInvoice(String uuid, String link) {}
 
+  @Serdeable
   public static record CryptoCloudRequestResponse(
     String status,
     CryptoCloudInvoice result
