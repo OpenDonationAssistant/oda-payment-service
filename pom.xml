@@ -49,6 +49,10 @@
       <artifactId>logback-classic</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.micronaut.problem</groupId>
+      <artifactId>micronaut-problem-json</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-inject-java</artifactId>
     </dependency>

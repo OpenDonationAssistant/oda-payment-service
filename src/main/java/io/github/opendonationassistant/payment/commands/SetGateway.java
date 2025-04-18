@@ -13,7 +13,7 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
-
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -41,8 +41,12 @@ public class SetGateway extends BaseController {
       return HttpResponse.unauthorized();
     }
 
-    MDC.put("command", ToString.asJson(command));
-    MDC.put("recipientId", recipientId.get());
+    MDC.put(
+      "context",
+      ToString.asJson(
+        Map.of("command", command, "recipientId", recipientId.get())
+      )
+    );
     log.info("Processing SetGatewayCommand");
 
     final GatewayCredentialsData data = new GatewayCredentialsData(
@@ -73,5 +77,4 @@ public class SetGateway extends BaseController {
     String secret,
     boolean enabled
   ) {}
-
 }
