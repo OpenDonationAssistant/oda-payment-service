@@ -12,6 +12,8 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -22,6 +24,11 @@ public class SetGateway extends BaseController {
   private Logger log = LoggerFactory.getLogger(SetGateway.class);
 
   private GatewayCredentialsDataRepository repository;
+
+  @Inject
+  public SetGateway(GatewayCredentialsDataRepository repository) {
+    this.repository = repository;
+  }
 
   @Post("/payments/commands/setgateway")
   @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -66,4 +73,5 @@ public class SetGateway extends BaseController {
     String secret,
     boolean enabled
   ) {}
+
 }
