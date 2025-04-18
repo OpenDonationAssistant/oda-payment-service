@@ -84,11 +84,4 @@ public class CompletePaymentCommand {
   public void setPaymentId(String paymentId) {
     this.paymentId = paymentId;
   }
-
-  @Override
-  public String toString() {
-    return """
-    { "_type":"CompletePaymentCommand", "id":"%s", "paymentId":"%s" }
-    """.formatted(id, paymentId);
-  }
 }

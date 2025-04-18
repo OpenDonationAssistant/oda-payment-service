@@ -13,9 +13,4 @@ public class PaymentMethod {
   public void setType(String type) {
     this.type = type;
   }
-
-  @Override
-  public String toString() {
-    return "{\"_type\"=\"PaymentMethod\",\"type\"=\"" + type + "}";
-  }
 }

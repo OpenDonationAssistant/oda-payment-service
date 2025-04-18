@@ -23,9 +23,4 @@ public class Amount {
   public void setCurrency(String currency) {
     this.currency = currency;
   }
-
-  @Override
-  public String toString() {
-    return "Amount [value=" + value + ", currency=" + currency + "]";
-  }
 }

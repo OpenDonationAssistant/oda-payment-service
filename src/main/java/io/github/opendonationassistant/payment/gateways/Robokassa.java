@@ -1,14 +1,17 @@
 package io.github.opendonationassistant.payment.gateways;
 
+import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.payment.initedpayment.InitedPayment;
 import io.github.opendonationassistant.robokassa.RobokassaClient;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class Robokassa implements Gateway {
 
@@ -42,11 +45,15 @@ public class Robokassa implements Gateway {
           )
       )
     );
-    log.info("Payment: {}", payment);
+    MDC.put("context", ToString.asJson(Map.of("payments", payment)));
+    log.info("Init Robokassa Payment");
+
     return client
       .init(payment)
       .thenApply(created -> {
-        log.info("Created  by robokassa: {}", created);
+        MDC.put("context", ToString.asJson(Map.of("response",created)));
+        log.info("Received Robokassa Response");
+
         var inited = new InitedPayment();
         inited.setGateway("robokassa");
         inited.setGatewayId(created.getInvoiceId());
@@ -73,6 +80,6 @@ public class Robokassa implements Gateway {
 
   @Override
   public CompletableFuture<String> status(String gatewayId) {
-    return  CompletableFuture.supplyAsync(() -> "completed");
+    return CompletableFuture.supplyAsync(() -> "completed");
   }
 }

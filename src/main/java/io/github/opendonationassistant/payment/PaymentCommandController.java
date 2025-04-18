@@ -1,5 +1,6 @@
 package io.github.opendonationassistant.payment;
 
+import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.payment.commands.completepayment.CompletePaymentCommand;
 import io.github.opendonationassistant.payment.commands.createpayment.CreatePaymentCommand;
 import io.github.opendonationassistant.payment.completedpayment.CompletedPayment;
@@ -11,9 +12,11 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 @Controller
 public class PaymentCommandController {
@@ -38,6 +41,9 @@ public class PaymentCommandController {
   public CompletableFuture<InitedPayment> createDraft(
     @Body CreatePaymentCommand command
   ) {
+    MDC.put("context", ToString.asJson(Map.of("command", command)));
+    log.info("Processing CreatePaymentCommand");
+
     return command.execute(gatewayProvider);
   }
 
@@ -46,7 +52,9 @@ public class PaymentCommandController {
   public CompletableFuture<CompletedPayment> complete(
     @Body CompletePaymentCommand command
   ) {
-    log.info("{}", command);
+    MDC.put("context", ToString.asJson(Map.of("command", command)));
+    log.info("Processing CompletePaymentCommand");
+
     return command.execute(gatewayProvider);
   }
 }

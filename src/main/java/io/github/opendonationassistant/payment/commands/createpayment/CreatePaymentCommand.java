@@ -72,7 +72,6 @@ public class CreatePaymentCommand {
   public CompletableFuture<InitedPayment> execute(
     GatewayProvider gatewayProvider
   ) {
-    log.info("Execute command: {}", this);
     return gatewayProvider
       .get(recipientId)
       .init(new InitPaymentParams(recipientId, id, amount))
@@ -88,21 +87,6 @@ public class CreatePaymentCommand {
         result.save();
         return result;
       });
-  }
-
-  @Override
-  public String toString() {
-      return """
-              { "_type":"CreatePaymentCommand", "id":"%s", "nickname":"%s", "message":"%s", "recipientId":"%s", "amount":%s, "goal":%s, "attachments":%s }
-              """.formatted(
-        id,
-        nickname,
-        message,
-        recipientId,
-        amount,
-        goal,
-        attachments
-      );
   }
 
   public String getNickname() {

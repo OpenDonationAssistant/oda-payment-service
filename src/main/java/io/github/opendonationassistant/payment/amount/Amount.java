@@ -29,16 +29,4 @@ public class Amount {
   public String getCurrency() {
     return currency;
   }
-
-  @Override
-  public String toString() {
-    return """
-    {
-      "_type": "Amount",
-      "major":"%s",
-      "minor":"%s",
-      "currency":"%s"
-    }
-    """.formatted(major, minor, currency);
-  }
 }

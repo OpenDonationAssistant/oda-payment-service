@@ -1,5 +1,6 @@
 package io.github.opendonationassistant.payment;
 
+import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.payment.commands.completepayment.CompletePaymentCommand;
 import io.github.opendonationassistant.payment.gateways.GatewayProvider;
 import io.micronaut.http.MediaType;
@@ -11,11 +12,11 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
-
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 @Controller
 public class PaymentEventController {
@@ -34,13 +35,17 @@ public class PaymentEventController {
     this.gatewayProvider = gatewayProvider;
   }
 
-  private void handleYookassa(PaymentEvent event) {
-    log.info("PaymentEvent: {}", event);
+  @Post("/notification/yookassa")
+  @Secured(SecurityRule.IS_ANONYMOUS)
+  public void handleYookassaEvent(@Body PaymentEvent event) {
+    MDC.put("context", ToString.asJson(Map.of("event", event)));
+    log.info("YooKassa Payment Event");
+
     if ("payment.canceled".equals(event.getEvent())) {
       return;
     }
     try {
-      Thread.sleep(10000); // todo handle simultanious commands
+      Thread.sleep(10000); // TODO: handle simultanious commands
     } catch (Exception e) {}
     payments
       .getByGatewayId(event.getObject().getId())
@@ -49,25 +54,15 @@ public class PaymentEventController {
       );
   }
 
-  @Post("/notification/tabularussia")
-  @Secured(SecurityRule.IS_ANONYMOUS)
-  public void deprecatedEndpoint(@Body PaymentEvent event) {
-    handleYookassa(event);
-  }
-
-  @Post("/notification/yookassa")
-  @Secured(SecurityRule.IS_ANONYMOUS)
-  public void handleYookassaEvent(@Body PaymentEvent event) {
-    handleYookassa(event);
-  }
-
   @Post(
     value = "/notification/yoomoney",
     consumes = MediaType.APPLICATION_FORM_URLENCODED
   )
   @Secured(SecurityRule.IS_ANONYMOUS)
   public void handleYooMoneyEvent(@Body Map<String, Object> event) {
-    log.info("YooMoneyEvent: {}", event);
+    MDC.put("context", ToString.asJson(Map.of("event", event)));
+    log.info("YooMoney Payment Event");
+
     Optional.ofNullable(event.get("label")).ifPresent(paymentId -> {
       new CompletePaymentCommand((String) paymentId).execute(gatewayProvider);
     });
@@ -80,15 +75,24 @@ public class PaymentEventController {
     @QueryValue("SHP_ID") String id,
     @QueryValue("InvId") String invoice
   ) {
-    log.info("SignatureValue: {}, SHP_ID:  {}, InvId", signature, id, invoice);
+    MDC.put(
+      "context",
+      ToString.asJson(
+        Map.of("signatureValue", signature, "shopId", id, "invId", invoice)
+      )
+    );
+    log.info("Robokassa Payment Event");
+
     try {
-      Thread.sleep(10000); // todo handle simultanious commands
+      Thread.sleep(10000); // TODO: handle simultanious commands
     } catch (Exception e) {}
+
     payments
       .findById(id)
       .ifPresent(payment ->
         new CompletePaymentCommand(payment.getId()).execute(gatewayProvider)
       );
+
     return "OK%s".formatted(invoice);
   }
 }

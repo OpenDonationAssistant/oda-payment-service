@@ -33,16 +33,4 @@ public class PaymentEvent {
   public void setObject(YooMoneyPayment object) {
     this.object = object;
   }
-
-  @Override
-  public String toString() {
-    return """
-      {
-        "_type":"PaymentEvent",
-        "type":"%s",
-        "event":"%s",
-        "object":"%s",
-      }
-    """.formatted(type, event, object);
-  }
 }

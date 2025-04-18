@@ -1,14 +1,17 @@
 package io.github.opendonationassistant.payment.gateways;
 
+import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.payment.amount.Amount;
 import io.github.opendonationassistant.payment.initedpayment.InitedPayment;
 import io.github.opendonationassistant.yoomoney.Confirmation;
 import io.github.opendonationassistant.yoomoney.YooMoney;
 import io.github.opendonationassistant.yoomoney.YooMoneyPayment;
 import io.micronaut.http.BasicAuth;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class YooKassa implements Gateway {
 
@@ -24,7 +27,9 @@ public class YooKassa implements Gateway {
   }
 
   public CompletableFuture<InitedPayment> init(InitPaymentParams params) {
-    log.info("Init payment: {} with keys: {}:{}", params, shopId, shopToken);
+    MDC.put("context", ToString.asJson(Map.of("params", params)));
+    log.info("Init YooKassa Payment");
+
     return yooMoney
       .init(
         new BasicAuth(shopId, shopToken),
@@ -39,7 +44,9 @@ public class YooKassa implements Gateway {
   }
 
   private InitedPayment asInitedPayment(YooMoneyPayment created) {
-    log.info("Received yookassa response: {}", created);
+    MDC.put("context", ToString.asJson(Map.of("response", created)));
+    log.info("Received YooKassa Response");
+
     var initedPayment = new InitedPayment();
     initedPayment.setGateway("yookassa");
     initedPayment.setGatewayId(created.getId());
@@ -61,7 +68,10 @@ public class YooKassa implements Gateway {
     // PaymentMethod paymentMethod = new PaymentMethod();
     // paymentMethod.setType(method);
     // payment.setPaymentMethod(paymentMethod);
-    log.info("Creating payment: {}", payment);
+
+    MDC.put("context", ToString.asJson(Map.of("payment", payment)));
+    log.info("Creating YooMoney Payment");
+
     return payment;
   }
 

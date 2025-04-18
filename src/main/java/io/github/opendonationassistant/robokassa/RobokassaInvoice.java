@@ -38,17 +38,4 @@ public class RobokassaInvoice {
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
-
-  @Override
-  public String toString() {
-    return (
-      "{\"_type\"=\"RobokassaInvoice\",\"invoiceId\"=\"" +
-      invoiceId +
-      "\", errorCode\"=\"" +
-      errorCode +
-      "\", errorMessage\"=\"" +
-      errorMessage +
-      "}"
-    );
-  }
 }

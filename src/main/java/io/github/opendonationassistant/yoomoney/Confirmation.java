@@ -27,13 +27,4 @@ public class Confirmation {
   public void setConfirmationToken(String confirmationToken) {
     this.confirmationToken = confirmationToken;
   }
-
-  @Override
-  public String toString() {
-    return String.format(
-      "Confirmation [type=%s, confirmationToken=%s]",
-      type,
-      confirmationToken
-    );
-  }
 }

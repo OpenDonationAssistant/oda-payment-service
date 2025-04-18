@@ -73,25 +73,4 @@ public class YooMoneyPayment {
   public void setSavePaymentMethod(String savePaymentMethod) {
     this.savePaymentMethod = savePaymentMethod;
   }
-
-  @Override
-  public String toString() {
-    return (
-      "{\"_type\"=\"YooMoneyPayment\",\"id\"=\"" +
-      id +
-      "\", status\"=\"" +
-      status +
-      "\", amount\"=\"" +
-      amount +
-      "\", confirmation\"=\"" +
-      confirmation +
-      "\", capture\"=\"" +
-      capture +
-      "\", paymentMethod\"=\"" +
-      paymentMethod +
-      "\", savePaymentMethod\"=\"" +
-      savePaymentMethod +
-      "}"
-    );
-  }
 }
