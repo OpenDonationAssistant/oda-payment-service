@@ -43,7 +43,7 @@ public class GatewayCredentialsData {
       recipient,
       gatewayId,
       token,
-      gatewayId,
+      gateway,
       secret,
       !enabled
     );

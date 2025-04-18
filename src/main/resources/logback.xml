@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <configuration>
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder"/>
+    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder">
+      <withSequenceNumber>false</withSequenceNumber>
+      <withNanoseconds>false</withNanoseconds>
+      <withContext>false</withContext>
+    </encoder>
   </appender>
   <logger name="org.flywaydb.core" level="WARN"/>
   <logger name="com.zaxxer.hikari" level="WARN"/>
