@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <configuration>
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>{"timestamp":"%d{HH:mm:ss.SSS}","level":"%level","logger":"%logger","context":%X{context},"message": "%replace(%replace(%msg){'\"','\\"'}){'\n',\" \"}"}%n</pattern>
-    </encoder>
+    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder"/>
   </appender>
   <logger name="org.flywaydb.core" level="WARN"/>
   <logger name="com.zaxxer.hikari" level="WARN"/>
