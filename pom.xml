@@ -35,14 +35,14 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>io.github.opendonationassistant</groupId>
+      <artifactId>oda-commons</artifactId>
+      <version>0.7.4-30</version>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.uuid</groupId>
       <artifactId>java-uuid-generator</artifactId>
       <version>5.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

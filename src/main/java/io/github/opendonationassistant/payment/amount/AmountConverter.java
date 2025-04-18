@@ -4,10 +4,10 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.data.model.runtime.convert.AttributeConverter;
+import jakarta.inject.Singleton;
+
 import java.util.Objects;
 import java.util.Optional;
-
-import javax.inject.Singleton;
 
 @Singleton
 public class AmountConverter implements AttributeConverter<Amount, String> {

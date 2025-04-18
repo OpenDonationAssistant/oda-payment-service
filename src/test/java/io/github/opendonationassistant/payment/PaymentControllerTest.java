@@ -9,9 +9,9 @@ import io.github.opendonationassistant.payment.commands.createpayment.CreatePaym
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;
-import java.util.List;
+import jakarta.inject.Inject;
 
-import javax.inject.Inject;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 

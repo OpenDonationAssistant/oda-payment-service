@@ -37,6 +37,18 @@ public class GatewayCredentialsData {
     this.enabled = enabled;
   }
 
+  public GatewayCredentialsData toggle() {
+    return new GatewayCredentialsData(
+      id,
+      recipient,
+      gatewayId,
+      token,
+      gatewayId,
+      secret,
+      !enabled
+    );
+  }
+
   public GatewayData asGatewayData() {
     return new GatewayData(id, gateway, enabled);
   }

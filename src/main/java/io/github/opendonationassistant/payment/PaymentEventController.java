@@ -1,20 +1,19 @@
 package io.github.opendonationassistant.payment;
 
-import com.fasterxml.uuid.Generators;
 import io.github.opendonationassistant.payment.commands.completepayment.CompletePaymentCommand;
 import io.github.opendonationassistant.payment.gateways.GatewayProvider;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import jakarta.inject.Inject;
+
 import java.util.Map;
 import java.util.Optional;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
