@@ -59,12 +59,22 @@ public class SetGateway extends BaseController {
       command.enabled()
     );
 
+    if (command.enabled()){
+      repository
+        .findByRecipient(recipientId.get())
+        .stream()
+        .filter(gateway -> gateway.isEnabled())
+        .map(gateway -> gateway.toggle())
+        .forEach(repository::update);
+    }
+
     repository
       .findById(data.getId())
       .ifPresentOrElse(
         it -> repository.update(data),
         () -> repository.save(data)
       );
+
     return HttpResponse.ok();
   }
 

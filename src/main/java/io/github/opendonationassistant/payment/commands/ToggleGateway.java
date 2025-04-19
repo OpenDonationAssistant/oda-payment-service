@@ -14,6 +14,7 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
+import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +45,12 @@ public class ToggleGateway extends BaseController {
       return HttpResponse.unauthorized();
     }
 
-    MDC.put("command", ToString.asJson(command));
-    MDC.put("recipientId", recipientId.get());
+    MDC.put(
+      "context",
+      ToString.asJson(
+        Map.of("command", command, "recipientId", recipientId.get())
+      )
+    );
     log.info("Processing ToggleGatewayCommand");
 
     @NonNull
