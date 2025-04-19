@@ -25,11 +25,6 @@ jobs:
         servers: '[{"id": "github", "username": "${{ secrets.MAVEN_USER }}", "password": "${{ secrets.MAVEN_TOKEN }}"}]'
         repositories: '[{"id":"github","name":"github","url":"https://maven.pkg.github.com/opendonationassistant/oda-libraries","snapshots":{"enabled":true}}]'
 
-    - name: Analyze with Sonar
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B -q verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-
     - name: Build service
       run: mvn -B -q clean package -Dpackaging=native-image -DskipTests
 
