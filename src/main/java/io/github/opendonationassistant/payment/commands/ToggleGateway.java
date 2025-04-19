@@ -62,6 +62,14 @@ public class ToggleGateway extends BaseController {
       return HttpResponse.unauthorized();
     }
 
+    if (!gateway.get().isEnabled()) {
+      credentialsDataRepository
+        .findByRecipient(recipientId.get())
+        .stream()
+        .filter(it -> it.isEnabled())
+        .forEach(it -> credentialsDataRepository.update(it.toggle()));
+    }
+
     gateway
       .map(GatewayCredentialsData::toggle)
       .ifPresent(credentialsDataRepository::update);
