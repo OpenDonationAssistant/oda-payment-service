@@ -32,11 +32,11 @@ public class GatewayProvider {
   }
 
   public Gateway get(String recipientId) {
-    var credentials = credentialsProvider.findByRecipient(recipientId);
-    if (credentials.size() < 1) {
+    var credentials = credentialsProvider.findByRecipient(recipientId).stream().filter(cred -> cred.isEnabled()).findFirst();
+    if (credentials.isEmpty()) {
       throw new RuntimeException("No credentials for recipient " + recipientId);
     }
-    var cred = credentials.get(0);
+    var cred = credentials.get();
     String shopId = cred.getGatewayId();
     String shopToken = cred.getToken();
     switch (Gateway.Type.from(cred.getGateway())) {
