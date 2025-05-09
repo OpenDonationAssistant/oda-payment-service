@@ -1,0 +1,63 @@
+package io.github.opendonationassistant.payment.repository;
+
+import io.github.opendonationassistant.commons.Amount;
+import io.github.opendonationassistant.commons.StringListConverter;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.MappedProperty;
+import io.micronaut.data.model.DataType;
+import io.micronaut.serde.annotation.Serdeable;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+
+@Serdeable
+@MappedEntity("payment")
+public record PaymentData(
+  @Id String id,
+  String gateway,
+  String gatewayId,
+  String method,
+  String nickname,
+  String message,
+  String recipientId,
+  Amount amount,
+  String confirmation,
+  @MappedProperty("cred_id") String gatewayCredentialId,
+  String goal,
+  Instant authorizationTimestamp,
+  String status,
+  @MappedProperty(converter = StringListConverter.class)
+  List<String> attachments,
+  @MappedProperty(type = DataType.JSON) List<Action> actions,
+  @MappedProperty(type = DataType.JSON) Auction auction
+) {
+  public PaymentData withAuthorizationTimestamp(
+    Instant newAuthorizationTimestamp
+  ) {
+    return new PaymentData(
+      id,
+      gateway,
+      gatewayId,
+      method,
+      nickname,
+      message,
+      recipientId,
+      amount,
+      confirmation,
+      gatewayCredentialId,
+      goal,
+      newAuthorizationTimestamp,
+      status,
+      attachments,
+      actions,
+      auction
+    );
+  }
+
+  @Serdeable
+  public static record Action(String name, Map<String, Object> properties) {}
+
+  @Serdeable
+  public static record Auction(String item, Boolean isNew) {}
+}
