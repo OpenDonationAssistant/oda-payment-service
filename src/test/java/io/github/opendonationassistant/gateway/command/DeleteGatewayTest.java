@@ -54,7 +54,7 @@ public class DeleteGatewayTest {
     );
     assertTrue(shouldExist.isPresent());
 
-    deleteGateway.delete(auth, new DeleteGatewayCommand("tempId"));
+    deleteGateway.deleteGateway(auth, new DeleteGatewayCommand("tempId"));
     assertTrue(repository.findById("tempId").isEmpty());
   }
 }
