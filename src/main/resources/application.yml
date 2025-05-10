@@ -1,3 +1,4 @@
+problem.stack-trace: false
 micronaut:
   application:
     name: oda-payment-service
