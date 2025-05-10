@@ -25,7 +25,7 @@ public class DeleteGateway extends BaseController {
 
   @Post("/payments/commands/deletegateway")
   @Secured(SecurityRule.IS_AUTHENTICATED)
-  public HttpResponse<Void> delete(
+  public HttpResponse<Void> deleteGateway(
     Authentication auth,
     @Body DeleteGatewayCommand command
   ) {
