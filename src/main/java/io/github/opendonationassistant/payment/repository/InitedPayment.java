@@ -33,9 +33,12 @@ public class InitedPayment extends Payment {
       .status(this.getData().gatewayId())
       .thenApply(status -> {
         // TODO: check status
-        log.debug("payment: {}, status: {}", this.getData().id(), status);
+        var result = "completed".equals(status) ? "completed" : "failed";
+        log.debug("payment: {}, status: {}", this.getData().id(), result);
         var updatedData =
-          this.getData().withAuthorizationTimestamp(Instant.now());
+          this.getData()
+            .withAuthorizationTimestamp(Instant.now())
+            .withStatus(result);
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
         );

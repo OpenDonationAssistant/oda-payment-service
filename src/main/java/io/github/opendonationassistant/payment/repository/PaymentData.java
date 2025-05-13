@@ -56,6 +56,28 @@ public record PaymentData(
     );
   }
 
+  public PaymentData withStatus(String newStatus){
+    return new PaymentData(
+      id,
+      gateway,
+      gatewayId,
+      method,
+      nickname,
+      message,
+      recipientId,
+      amount,
+      confirmation,
+      gatewayCredentialId,
+      goal,
+      authorizationTimestamp,
+      newStatus,
+      attachments,
+      actions,
+      auction
+    );
+
+  }
+
   @Serdeable
   public static record Action(String name, Map<String, Object> properties) {}
 
