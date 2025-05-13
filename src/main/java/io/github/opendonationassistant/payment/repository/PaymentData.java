@@ -10,6 +10,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import jakarta.annotation.Nullable;
 
 @Serdeable
 @MappedEntity("payment")
@@ -25,7 +26,7 @@ public record PaymentData(
   String confirmation,
   @MappedProperty("cred_id") String gatewayCredentialId,
   String goal,
-  Instant authorizationTimestamp,
+  @Nullable Instant authorizationTimestamp,
   String status,
   @MappedProperty(converter = StringListConverter.class)
   List<String> attachments,
