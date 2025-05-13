@@ -2,6 +2,7 @@ problem.stack-trace: false
 micronaut:
   application:
     name: oda-payment-service
+  problem.stack-trace: false
   security:
     authentication: bearer
     token:

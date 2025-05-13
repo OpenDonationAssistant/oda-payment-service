@@ -78,7 +78,7 @@ public class CreatePayment {
               command.id(),
               result.gateway(),
               result.gatewayId(),
-              command.method(),
+              Optional.ofNullable(command.method()).orElse(""),
               command.nickname(),
               command.message(),
               command.recipientId(),
