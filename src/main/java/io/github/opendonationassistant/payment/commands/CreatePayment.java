@@ -57,8 +57,10 @@ public class CreatePayment {
         )
       )
       .thenApply(result -> {
-        final List<PaymentData.Action> actions = command
-          .actions()
+        final List<PaymentData.Action> actions = Optional.ofNullable(
+          command.actions()
+        )
+          .orElseGet(() -> List.of())
           .stream()
           .map(it -> new PaymentData.Action(it.name(), it.properties()))
           .toList();
