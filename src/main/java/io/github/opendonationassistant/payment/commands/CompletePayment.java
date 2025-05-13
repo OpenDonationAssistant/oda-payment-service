@@ -44,12 +44,12 @@ public class CompletePayment {
       .getById(command.paymentId())
       .orElseThrow(() -> Problem.builder().withTitle("Missing payment").build())
       .complete(gateways)
-      .thenApply(payment -> new CompletePaymentResponse());
+      .thenApply(payment -> new CompletePaymentResponse(payment.getData().id(), payment.getData().status()));
   }
 
   @Serdeable
   public static record CompletePaymentCommand(String id, String paymentId) {}
 
   @Serdeable
-  public static record CompletePaymentResponse() {}
+  public static record CompletePaymentResponse(String id, String status) {}
 }
