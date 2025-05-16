@@ -2,6 +2,8 @@ package io.github.opendonationassistant.gateway.command;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.commons.micronaut.BaseController;
+import io.github.opendonationassistant.events.config.ConfigCommandSender;
+import io.github.opendonationassistant.events.config.ConfigPutCommand;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsData;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.micronaut.core.annotation.NonNull;
@@ -26,6 +28,7 @@ public class ToggleGateway extends BaseController {
   private Logger log = LoggerFactory.getLogger(ToggleGateway.class);
 
   private GatewayCredentialsDataRepository credentialsDataRepository;
+  private ConfigCommandSender configCommandSender;
 
   @Inject
   public ToggleGateway(
@@ -68,11 +71,19 @@ public class ToggleGateway extends BaseController {
         .stream()
         .filter(it -> it.isEnabled())
         .forEach(it -> credentialsDataRepository.update(it.toggle()));
+
+      var configCommand = new ConfigPutCommand();
+      configCommand.setName("paymentpage");
+      configCommand.setKey("gateway");
+      configCommand.setValue(gateway.get().getGateway());
+      configCommand.setOwnerId(recipientId.get());
+      configCommandSender.send(configCommand);
     }
 
     gateway
       .map(GatewayCredentialsData::toggle)
       .ifPresent(credentialsDataRepository::update);
+
     return HttpResponse.ok();
   }
 
