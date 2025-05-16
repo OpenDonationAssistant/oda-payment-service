@@ -31,7 +31,7 @@ public record PaymentData(
   @MappedProperty(converter = StringListConverter.class)
   List<String> attachments,
   @MappedProperty(type = DataType.JSON) List<Action> actions,
-  @MappedProperty(type = DataType.JSON) Auction auction
+  @MappedProperty(type = DataType.JSON) @Nullable Auction auction
 ) {
   public PaymentData withAuthorizationTimestamp(
     Instant newAuthorizationTimestamp
