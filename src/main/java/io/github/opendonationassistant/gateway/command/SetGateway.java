@@ -2,6 +2,8 @@ package io.github.opendonationassistant.gateway.command;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.commons.micronaut.BaseController;
+import io.github.opendonationassistant.events.config.ConfigCommandSender;
+import io.github.opendonationassistant.events.config.ConfigPutCommand;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsData;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.micronaut.http.HttpResponse;
@@ -25,10 +27,12 @@ public class SetGateway extends BaseController {
   private Logger log = LoggerFactory.getLogger(SetGateway.class);
 
   private GatewayCredentialsDataRepository repository;
+  private ConfigCommandSender configCommandSender;
 
   @Inject
-  public SetGateway(GatewayCredentialsDataRepository repository) {
+  public SetGateway(GatewayCredentialsDataRepository repository, ConfigCommandSender configCommandSender) {
     this.repository = repository;
+    this.configCommandSender = configCommandSender;
   }
 
   @Post("/payments/commands/setgateway")
@@ -77,6 +81,13 @@ public class SetGateway extends BaseController {
         it -> repository.update(data),
         () -> repository.save(data)
       );
+
+    var configCommand = new ConfigPutCommand();
+    configCommand.setName("paymentpage");
+    configCommand.setKey("gateway");
+    configCommand.setValue(command.gateway());
+    configCommand.setOwnerId(recipientId.get());
+    configCommandSender.send(configCommand);
 
     return HttpResponse.ok();
   }
