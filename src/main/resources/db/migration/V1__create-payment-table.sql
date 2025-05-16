@@ -1,4 +1,4 @@
-create table payment (
+create table payment.payment (
   id varchar(255),
   gateway_id varchar(255),
   nickname varchar(255),

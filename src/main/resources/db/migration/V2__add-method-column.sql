@@ -1,1 +1,1 @@
-alter table payment add method varchar(255);
+alter table payment.payment add method varchar(255);
