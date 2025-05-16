@@ -25,12 +25,12 @@ public record PaymentData(
   Amount amount,
   String confirmation,
   @MappedProperty("cred_id") String gatewayCredentialId,
-  String goal,
+  @Nullable String goal,
   @Nullable Instant authorizationTimestamp,
   String status,
   @MappedProperty(converter = StringListConverter.class)
   List<String> attachments,
-  @MappedProperty(type = DataType.JSON) List<Action> actions,
+  @MappedProperty(type = DataType.JSON) @Nullable List<Action> actions,
   @MappedProperty(type = DataType.JSON) @Nullable Auction auction
 ) {
   public PaymentData withAuthorizationTimestamp(
