@@ -92,7 +92,9 @@ public class PaymentController extends BaseController {
   }
 
   private PaymentDto.AuctionDto convert(Auction auction) {
-    return new PaymentDto.AuctionDto(auction.item(), auction.isNew());
+    return Optional.ofNullable(auction)
+      .map(it -> new PaymentDto.AuctionDto(auction.item(), auction.isNew()))
+      .orElse(null);
   }
 
   private PaymentDto.ActionDto convert(Action action) {
