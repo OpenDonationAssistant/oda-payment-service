@@ -32,9 +32,11 @@ public class ToggleGateway extends BaseController {
 
   @Inject
   public ToggleGateway(
-    GatewayCredentialsDataRepository credentialsDataRepository
+    GatewayCredentialsDataRepository credentialsDataRepository,
+    ConfigCommandSender configCommandSender
   ) {
     this.credentialsDataRepository = credentialsDataRepository;
+    this.configCommandSender =  configCommandSender;
   }
 
   @Post("/payments/commands/togglegateway")
