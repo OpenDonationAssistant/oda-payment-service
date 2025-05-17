@@ -23,7 +23,7 @@ public record PaymentData(
   String message,
   String recipientId,
   Amount amount,
-  String confirmation,
+  @Nullable String confirmation,
   @MappedProperty("cred_id") String gatewayCredentialId,
   @Nullable String goal,
   @Nullable Instant authorizationTimestamp,
