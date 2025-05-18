@@ -29,6 +29,7 @@ public class RobokassaNotification {
     GatewayRepository gateways
   ) {
     this.payments = payments;
+    this.gateways = gateways;
   }
 
   @Get(value = "/notification/robokassa", produces = MediaType.TEXT_PLAIN)
