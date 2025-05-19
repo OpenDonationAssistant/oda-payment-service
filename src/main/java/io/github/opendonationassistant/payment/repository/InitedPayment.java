@@ -42,6 +42,7 @@ public class InitedPayment extends Payment {
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
         );
+        log.debug("sending notification for {}, recipient: {}", updatedData.id(), updatedData.recipientId());
         notificationSender.send(
           new CompletedPaymentNotification(
             updatedData.id(),
