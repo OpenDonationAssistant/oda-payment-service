@@ -41,6 +41,10 @@ public class YooMoneyNotification {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("YooMoney Payment Event");
 
+    try {
+      Thread.sleep(30000); // TODO: handle simultanious commands
+    } catch (Exception e) {}
+
     Optional.ofNullable(event.get("label"))
       .flatMap(paymentId -> {
         return payments.getById((String) paymentId);

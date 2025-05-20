@@ -44,7 +44,7 @@ public class YooKassaNotification {
     }
 
     try {
-      Thread.sleep(10000); // TODO: handle simultanious commands
+      Thread.sleep(30000); // TODO: handle simultanious commands
     } catch (Exception e) {}
 
     payments
