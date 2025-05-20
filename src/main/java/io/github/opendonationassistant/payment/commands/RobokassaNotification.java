@@ -46,6 +46,7 @@ public class RobokassaNotification {
       )
     );
     log.info("Robokassa Payment Event");
+    MDC.clear();
 
     //try {
     //  Thread.sleep(30000); // TODO: handle simultanious commands

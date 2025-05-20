@@ -8,9 +8,11 @@ import io.github.opendonationassistant.wordblacklist.WordFilter;
 import io.github.opendonationassistant.wordblacklist.WordFilterRepository;
 import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 @Serdeable
 public class InitedPayment extends Payment {
@@ -27,7 +29,9 @@ public class InitedPayment extends Payment {
   }
 
   public CompletableFuture<Payment> complete(GatewayRepository gateways) {
-    log.debug("authorizing payment: {}", this);
+    MDC.put("context", ToString.asJson(Map.of("payment", this)));
+    log.debug("Authorizing payment");
+    MDC.clear();
     return gateways
       .get(this.getData().recipientId(), this.getData().gatewayCredentialId())
       .status(this.getData().gatewayId())
@@ -39,6 +43,9 @@ public class InitedPayment extends Payment {
           this.getData()
             .withAuthorizationTimestamp(Instant.now())
             .withStatus(result);
+        MDC.put("context", ToString.asJson(Map.of("payment", updatedData)));
+        log.debug("Payment completed");
+        MDC.clear();
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
         );
