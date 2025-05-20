@@ -43,9 +43,9 @@ public class YooKassaNotification {
       return;
     }
 
-    try {
-      Thread.sleep(30000); // TODO: handle simultanious commands
-    } catch (Exception e) {}
+    //try {
+    //  Thread.sleep(30000); // TODO: handle simultanious commands
+    //} catch (Exception e) {}
 
     payments
       .getByGatewayId(event.object().getId())

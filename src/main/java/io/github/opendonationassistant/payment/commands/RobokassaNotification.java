@@ -47,9 +47,9 @@ public class RobokassaNotification {
     );
     log.info("Robokassa Payment Event");
 
-    try {
-      Thread.sleep(30000); // TODO: handle simultanious commands
-    } catch (Exception e) {}
+    //try {
+    //  Thread.sleep(30000); // TODO: handle simultanious commands
+    //} catch (Exception e) {}
 
     payments.getById(id).ifPresent(payment -> payment.complete(gateways));
     return "OK%s".formatted(invoice);
