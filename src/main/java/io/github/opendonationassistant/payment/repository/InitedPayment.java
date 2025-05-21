@@ -30,7 +30,7 @@ public class InitedPayment extends Payment {
 
   public CompletableFuture<Payment> complete(GatewayRepository gateways) {
     MDC.put("context", ToString.asJson(Map.of("payment", this)));
-    log.debug("Authorizing payment");
+    log.info("Authorizing payment");
     MDC.clear();
     return gateways
       .get(this.getData().recipientId(), this.getData().gatewayCredentialId())
@@ -44,7 +44,7 @@ public class InitedPayment extends Payment {
             .withAuthorizationTimestamp(Instant.now())
             .withStatus(result);
         MDC.put("context", ToString.asJson(Map.of("payment", updatedData)));
-        log.debug("Payment completed");
+        log.info("Payment completed");
         MDC.clear();
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
