@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import jakarta.annotation.Nullable;
 
 @Controller
 public class CreatePayment {
@@ -110,7 +111,8 @@ public class CreatePayment {
     List<String> attachments,
     String goal,
     List<Action> actions,
-    Auction auction
+    Auction auction,
+    @Nullable String marker
   ) {
     @Serdeable
     public static record Auction(String item, Boolean isNew) {}
