@@ -1,4 +1,7 @@
 problem.stack-trace: false
+otel:
+  traces:
+    exporter: logging
 micronaut:
   application:
     name: oda-payment-service
