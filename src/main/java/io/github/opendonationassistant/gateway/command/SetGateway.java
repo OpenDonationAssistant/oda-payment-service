@@ -10,6 +10,8 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
@@ -38,6 +40,7 @@ public class SetGateway extends BaseController {
   @Post("/payments/commands/setgateway")
   @Secured(SecurityRule.IS_AUTHENTICATED)
   @Transactional
+  @ExecuteOn(TaskExecutors.BLOCKING)
   public HttpResponse<Void> setGateway(
     Authentication auth,
     @Body SetGatewayCommand command
