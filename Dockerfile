@@ -1,5 +1,5 @@
-FROM docker.io/library/eclipse-temurin:21-jdk-jammy
+FROM fedora:41
 WORKDIR /app
-COPY target/oda-payment-service-0.1.5.jar /app
+COPY target/oda-payment-service /app
 
-CMD ["java","--add-opens","java.base/java.time=ALL-UNNAMED","-jar","oda-payment-service-0.1.5.jar"]
+CMD ["./oda-payment-service"]

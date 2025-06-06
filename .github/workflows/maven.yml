@@ -26,7 +26,7 @@ jobs:
         repositories: '[{"id":"github","name":"github","url":"https://maven.pkg.github.com/opendonationassistant/oda-libraries","snapshots":{"enabled":true}}]'
 
     - name: Build service
-      run: mvn -B -q clean package -DskipTests
+      run: mvn -B -q clean package -Dpackaging=native-image -DskipTests
 
     - run: npm install
       working-directory: "target/generated-sources/openapi/"
