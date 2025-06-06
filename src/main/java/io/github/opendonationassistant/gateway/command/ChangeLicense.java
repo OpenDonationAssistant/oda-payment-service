@@ -32,6 +32,7 @@ public class ChangeLicense extends BaseController {
 
   @Post("/payments/commands/changelicense")
   @Secured(SecurityRule.IS_AUTHENTICATED)
+  @ExecuteOn(TaskExecutors.BLOCKING)
   public HttpResponse<Void> changeLicense(
     Authentication auth,
     @Body ChangeLicenseCommand command
