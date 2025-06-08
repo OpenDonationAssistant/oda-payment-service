@@ -7,6 +7,8 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
@@ -37,6 +39,7 @@ public class YooMoneyNotification {
     consumes = MediaType.APPLICATION_FORM_URLENCODED
   )
   @Secured(SecurityRule.IS_ANONYMOUS)
+  @ExecuteOn(TaskExecutors.BLOCKING)
   public void handleYooMoneyEvent(@Body Map<String, Object> event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("YooMoney Payment Event");
@@ -49,6 +52,6 @@ public class YooMoneyNotification {
       .flatMap(paymentId -> {
         return payments.getById((String) paymentId);
       })
-      .ifPresent(payment -> payment.complete(gateways));
+      .map(payment -> payment.complete(gateways).join());
   }
 }

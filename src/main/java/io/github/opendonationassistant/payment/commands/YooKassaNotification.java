@@ -7,6 +7,8 @@ import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -35,6 +37,7 @@ public class YooKassaNotification {
 
   @Post("/notification/yookassa")
   @Secured(SecurityRule.IS_ANONYMOUS)
+  @ExecuteOn(TaskExecutors.BLOCKING)
   public void handleYookassaEvent(@Body PaymentEvent event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("YooKassa Payment Event");
@@ -49,7 +52,7 @@ public class YooKassaNotification {
 
     payments
       .getByGatewayId(event.object().getId())
-      .ifPresent(payment -> payment.complete(gateways));
+      .map(payment -> payment.complete(gateways).join());
   }
 
   @Serdeable

@@ -7,6 +7,8 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
@@ -34,6 +36,7 @@ public class RobokassaNotification {
 
   @Get(value = "/notification/robokassa", produces = MediaType.TEXT_PLAIN)
   @Secured(SecurityRule.IS_ANONYMOUS)
+  @ExecuteOn(TaskExecutors.BLOCKING)
   public String handleRobokassaEvent(
     @QueryValue("SignatureValue") String signature,
     @QueryValue("SHP_ID") String id,
@@ -52,7 +55,7 @@ public class RobokassaNotification {
     //  Thread.sleep(30000); // TODO: handle simultanious commands
     //} catch (Exception e) {}
 
-    payments.getById(id).ifPresent(payment -> payment.complete(gateways));
+    payments.getById(id).map(payment -> payment.complete(gateways).join());
     return "OK%s".formatted(invoice);
   }
 }
