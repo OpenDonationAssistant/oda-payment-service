@@ -51,7 +51,7 @@ public class CreatePayment {
     MDC.put("context", ToString.asJson(Map.of("command", command)));
     log.info("Processing CreatePaymentCommand");
 
-    if (command.marker() != null && banned.contains(command.marker())){
+    if (command.marker() != null && banned.contains(command.marker())) {
       throw Problem.builder().build();
     }
 

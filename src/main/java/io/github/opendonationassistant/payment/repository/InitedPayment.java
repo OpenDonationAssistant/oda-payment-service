@@ -53,11 +53,9 @@ public class InitedPayment extends Payment {
         notificationSender.send(
           new CompletedPaymentNotification(
             updatedData.id(),
-            //updatedData.nickname(),
+            updatedData.nickname(),
             wordFilter.filter(updatedData.nickname()),
-            wordFilter.filter(updatedData.nickname()),
-            //updatedData.message(),
-            wordFilter.filter(updatedData.message()),
+            updatedData.message(),
             wordFilter.filter(updatedData.message()),
             updatedData.recipientId(),
             updatedData.amount(),
