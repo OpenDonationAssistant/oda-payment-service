@@ -25,11 +25,14 @@ import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
 
 @Controller
 public class CreatePayment {
 
   private final Logger log = LoggerFactory.getLogger(CreatePayment.class);
+  private List<String> banned = List.of("0196f2a4-b6f7-7e47-9a01-3e3cfad8da1a");
 
   private final GatewayRepository gateways;
   private final PaymentRepository payments;
@@ -47,6 +50,10 @@ public class CreatePayment {
   ) {
     MDC.put("context", ToString.asJson(Map.of("command", command)));
     log.info("Processing CreatePaymentCommand");
+
+    if (command.marker() != null && banned.contains(command.marker()){
+      throw Problem.builder().build();
+    }
 
     return gateways
       .get(command.recipientId(), command.gatewayCredId())
