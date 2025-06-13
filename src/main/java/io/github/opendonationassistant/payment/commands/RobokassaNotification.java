@@ -55,7 +55,7 @@ public class RobokassaNotification {
     //  Thread.sleep(30000); // TODO: handle simultanious commands
     //} catch (Exception e) {}
 
-    payments.getById(id).map(payment -> payment.complete(gateways))
+    payments.getById(id).map(payment -> payment.complete(gateways));
     return "OK%s".formatted(invoice);
   }
 }
