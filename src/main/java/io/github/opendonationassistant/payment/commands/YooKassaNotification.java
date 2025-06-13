@@ -46,13 +46,9 @@ public class YooKassaNotification {
       return;
     }
 
-    //try {
-    //  Thread.sleep(30000); // TODO: handle simultanious commands
-    //} catch (Exception e) {}
-
     payments
       .getByGatewayId(event.object().getId())
-      .map(payment -> payment.complete(gateways).join());
+      .map(payment -> payment.complete(gateways));
   }
 
   @Serdeable
