@@ -32,7 +32,7 @@ import org.zalando.problem.ProblemBuilder;
 public class CreatePayment {
 
   private final Logger log = LoggerFactory.getLogger(CreatePayment.class);
-  private List<String> banned = List.of("0196f2a4-b6f7-7e47-9a01-3e3cfad8da1a", "0197bae1-c751-7e4f-8434-825fecf03ae0");
+  private List<String> banned = List.of("0196f2a4-b6f7-7e47-9a01-3e3cfad8da1a", "0197bae1-c751-7e4f-8434-825fecf03ae0", "0197baef-0e58-706f-99ed-33df348cf034");
 
   private final GatewayRepository gateways;
   private final PaymentRepository payments;
