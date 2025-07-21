@@ -1,6 +1,7 @@
 package io.github.opendonationassistant.payment.repository;
 
 import io.github.opendonationassistant.commons.ToString;
+import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.events.CompletedPaymentNotification;
 import io.github.opendonationassistant.events.PaymentNotificationSender;
 import io.github.opendonationassistant.gateway.GatewayRepository;
@@ -17,7 +18,7 @@ import org.slf4j.MDC;
 @Serdeable
 public class InitedPayment extends Payment {
 
-  private final Logger log = LoggerFactory.getLogger(InitedPayment.class);
+  private final ODALogger log = new ODALogger(this);
 
   public InitedPayment(
     PaymentData data,
@@ -29,27 +30,34 @@ public class InitedPayment extends Payment {
   }
 
   public CompletableFuture<Payment> complete(GatewayRepository gateways) {
-    MDC.put("context", ToString.asJson(Map.of("payment", this)));
-    log.info("Authorizing payment");
-    MDC.clear();
+    log.info("Authorizing payment", Map.of("payment", this));
     return gateways
       .get(this.getData().recipientId(), this.getData().gatewayCredentialId())
       .status(this.getData().gatewayId())
       .thenApply(status -> {
         // TODO: check status
         var result = "completed".equals(status) ? "completed" : "failed";
-        log.debug("payment: {}, status: {}", this.getData().id(), result);
+        log.debug(
+          "payment: {}, status: {}",
+          Map.of("id", this.getData().id(), "result", result)
+        );
         var updatedData =
           this.getData()
             .withAuthorizationTimestamp(Instant.now())
             .withStatus(result);
-        MDC.put("context", ToString.asJson(Map.of("payment", updatedData)));
-        log.info("Payment completed");
-        MDC.clear();
+        log.info("Payment completed", Map.of("context", updatedData));
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
         );
-        log.info("sending notification for {}, recipient: {}", updatedData.id(), updatedData.recipientId());
+        log.info(
+          "Sending notification for {}, recipient: {}",
+          Map.of(
+            "paymentId",
+            updatedData.id(),
+            "recipientId",
+            updatedData.recipientId()
+          )
+        );
         notificationSender.send(
           new CompletedPaymentNotification(
             updatedData.id(),

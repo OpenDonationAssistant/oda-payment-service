@@ -8,24 +8,17 @@
   <parent>
     <groupId>io.micronaut.platform</groupId>
     <artifactId>micronaut-parent</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
   </parent>
   <properties>
     <packaging>jar</packaging>
     <jdk.version>21</jdk.version>
     <release.version>21</release.version>
-    <micronaut.version>4.8.2</micronaut.version>
+    <micronaut.version>4.8.3</micronaut.version>
     <micronaut.runtime>netty</micronaut.runtime>
     <micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
     <micronaut.aot.enabled>false</micronaut.aot.enabled>
     <exec.mainClass>io.github.opendonationassistant.Application</exec.mainClass>
-    <sonar.organization>opendonationassistant</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-    <sonar.projectKey>OpenDonationAssistant_oda-payment-service</sonar.projectKey>
-    <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-    <sonar.language>java</sonar.language>
   </properties>
   <repositories>
     <repository>
