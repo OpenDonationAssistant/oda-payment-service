@@ -52,12 +52,14 @@ public class ChangeLicense extends BaseController {
     );
     log.info("Processing ChangeLicenseCommand");
 
-    var configCommand = new ConfigPutCommand();
-    configCommand.setName("paymentpage");
-    configCommand.setKey("gateway");
-    configCommand.setValue(command.gateway());
-    configCommand.setOwnerId(recipientId.get());
-    configCommandSender.send(configCommand);
+    configCommandSender.send(
+      new ConfigPutCommand(
+        recipientId.get(),
+        "paymentpage",
+        "gateway",
+        command.gateway()
+      )
+    );
 
     return HttpResponse.ok();
   }

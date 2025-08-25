@@ -32,7 +32,10 @@ public class SetGateway extends BaseController {
   private ConfigCommandSender configCommandSender;
 
   @Inject
-  public SetGateway(GatewayCredentialsDataRepository repository, ConfigCommandSender configCommandSender) {
+  public SetGateway(
+    GatewayCredentialsDataRepository repository,
+    ConfigCommandSender configCommandSender
+  ) {
     this.repository = repository;
     this.configCommandSender = configCommandSender;
   }
@@ -85,12 +88,14 @@ public class SetGateway extends BaseController {
         () -> repository.save(data)
       );
 
-    var configCommand = new ConfigPutCommand();
-    configCommand.setName("paymentpage");
-    configCommand.setKey("gateway");
-    configCommand.setValue(command.gateway());
-    configCommand.setOwnerId(recipientId.get());
-    configCommandSender.send(configCommand);
+    configCommandSender.send(
+      new ConfigPutCommand(
+        recipientId.get(),
+        "paymentpage",
+        "gateway",
+        command.gateway()
+      )
+    );
 
     return HttpResponse.ok();
   }

@@ -38,7 +38,7 @@ public class ToggleGateway extends BaseController {
     ConfigCommandSender configCommandSender
   ) {
     this.credentialsDataRepository = credentialsDataRepository;
-    this.configCommandSender =  configCommandSender;
+    this.configCommandSender = configCommandSender;
   }
 
   @Post("/payments/commands/togglegateway")
@@ -77,12 +77,14 @@ public class ToggleGateway extends BaseController {
         .filter(it -> it.isEnabled())
         .forEach(it -> credentialsDataRepository.update(it.toggle()));
 
-      var configCommand = new ConfigPutCommand();
-      configCommand.setName("paymentpage");
-      configCommand.setKey("gateway");
-      configCommand.setValue(gateway.get().getGateway());
-      configCommand.setOwnerId(recipientId.get());
-      configCommandSender.send(configCommand);
+      configCommandSender.send(
+        new ConfigPutCommand(
+          recipientId.get(),
+          "paymentpage",
+          "gateway",
+          gateway.get().getGateway()
+        )
+      );
     }
 
     gateway

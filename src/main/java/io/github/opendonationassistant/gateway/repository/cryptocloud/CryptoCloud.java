@@ -22,10 +22,15 @@ public class CryptoCloud implements Gateway {
     return client
       .init(
         "Token %s".formatted(this.apiKey),
-        new CryptoCloudInvoiceRequest(this.shopId, params.amount().getMajor())
+        new CryptoCloudInvoiceRequest(
+          this.shopId,
+          params.amount().getMajor(),
+          "RUB"
+        )
       )
       .thenApply(CryptoCloudRequestResponse::result)
-      .thenApply(it -> new InitResponse("cryptocloud", it.uuid(), it.link(), ""));
+      .thenApply(it -> new InitResponse("cryptocloud", it.uuid(), it.link(), "")
+      );
   }
 
   @Override
