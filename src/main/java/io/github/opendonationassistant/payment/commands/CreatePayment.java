@@ -18,6 +18,8 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,6 +97,7 @@ public class CreatePayment {
               command.gatewayCredId(),
               command.goal(),
               null,
+              Instant.now(),
               Payment.Status.INITED.value(),
               command.attachments(),
               actions,

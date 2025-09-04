@@ -3,7 +3,6 @@ package io.github.opendonationassistant.payment.repository;
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.StringListConverter;
 import io.micronaut.data.annotation.Id;
-import io.micronaut.data.annotation.DateCreated;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.model.DataType;
@@ -28,7 +27,7 @@ public record PaymentData(
   @MappedProperty("cred_id") String gatewayCredentialId,
   @Nullable String goal,
   @Nullable Instant authorizationTimestamp,
-  @DateCreated @Nullable Instant creationTimestamp,
+  @Nullable Instant creationTimestamp,
   String status,
   @MappedProperty(converter = StringListConverter.class)
   List<String> attachments,
