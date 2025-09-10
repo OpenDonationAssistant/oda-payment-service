@@ -1,1 +1,1 @@
-alter table payment.payment add creation_timestamp timestamp;
+alter table payment add creation_timestamp timestamp;
