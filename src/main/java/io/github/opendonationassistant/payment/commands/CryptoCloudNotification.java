@@ -1,5 +1,6 @@
 package io.github.opendonationassistant.payment.commands;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
@@ -37,7 +38,7 @@ public class CryptoCloudNotification {
   @Post("/notification/cryptocloud")
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
-  public void handleYookassaEvent(@Body PaymentEvent event) {
+  public void handleCryptocloudEvent(@Body PaymentEvent event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("CryptoCloud Payment Event");
 
@@ -53,7 +54,9 @@ public class CryptoCloudNotification {
   @Serdeable
   public static record PaymentEvent(
     String status,
+    @JsonProperty("invoice_id")
     String invoiceId,
+    @JsonProperty("invoice_info")
     Invoice invoiceInfo
   ) {}
 
