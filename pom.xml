@@ -50,21 +50,22 @@
       <groupId>io.micronaut.tracing</groupId>
       <artifactId>micronaut-tracing-core</artifactId>
       <scope>compile</scope>
-      <!--<version>7.0.0</version>-->
     </dependency>
     <dependency>
       <groupId>io.micronaut.tracing</groupId>
       <artifactId>micronaut-tracing-opentelemetry-http</artifactId>
-      <!--<version>7.0.0</version>-->
     </dependency>
     <dependency>
       <groupId>io.micronaut.tracing</groupId>
       <artifactId>micronaut-tracing-opentelemetry-jdbc</artifactId>
-      <!--<version>7.0.0</version>-->
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.cache</groupId>
+      <artifactId>micronaut-cache-caffeine</artifactId>
     </dependency>
     <dependency>
       <groupId>io.micronaut.problem</groupId>

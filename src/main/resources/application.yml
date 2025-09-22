@@ -15,6 +15,9 @@ micronaut:
           jwks:
             keycloak:
               url: https://auth.oda.digital/realms/ODA/protocol/openid-connect/certs
+  caches:
+    jwks:
+      expire-after-write: 240h
   http.services.yoomoney.url: https://api.yookassa.ru
   http.services.cryptocloud.url: https://api.cryptocloud.plus
   http.services.fundraising:

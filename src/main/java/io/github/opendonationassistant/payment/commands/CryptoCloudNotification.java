@@ -2,7 +2,6 @@ package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.gateway.GatewayRepository;
-import io.github.opendonationassistant.gateway.repository.yookassa.client.YooKassaPayment;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -47,7 +46,7 @@ public class CryptoCloudNotification {
     }
 
     payments
-      .getByGatewayId(event.invoiceInfo().uuid())
+      .getByGatewayId("INV-%s".formatted(event.invoiceId()))
       .map(payment -> payment.complete(gateways));
   }
 
@@ -59,7 +58,5 @@ public class CryptoCloudNotification {
   ) {}
 
   @Serdeable
-  public static record Invoice(
-    String uuid
-  ){}
+  public static record Invoice(String uuid) {}
 }
