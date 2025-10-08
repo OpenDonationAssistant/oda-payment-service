@@ -2,13 +2,10 @@ package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.events.PaymentNotificationSender;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.payment.repository.Payment;
 import io.github.opendonationassistant.payment.repository.PaymentData;
-import io.github.opendonationassistant.payment.repository.PaymentData.Auction;
-import io.github.opendonationassistant.payment.repository.PaymentDataRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -18,7 +15,6 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +23,11 @@ import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.zalando.problem.Problem;
-import org.zalando.problem.ProblemBuilder;
 
 @Controller
 public class CreatePayment {
 
   private final Logger log = LoggerFactory.getLogger(CreatePayment.class);
-  private List<String> banned = List.of("0196f2a4-b6f7-7e47-9a01-3e3cfad8da1a", "0197bae1-c751-7e4f-8434-825fecf03ae0", "0197baef-0e58-706f-99ed-33df348cf034");
 
   private final GatewayRepository gateways;
   private final PaymentRepository payments;
@@ -52,10 +45,6 @@ public class CreatePayment {
   ) {
     MDC.put("context", ToString.asJson(Map.of("command", command)));
     log.info("Processing CreatePaymentCommand");
-
-    if (command.marker() != null && banned.contains(command.marker())) {
-      throw Problem.builder().build();
-    }
 
     return gateways
       .get(command.recipientId(), command.gatewayCredId())
@@ -127,7 +116,11 @@ public class CreatePayment {
     @Serdeable
     public static record Auction(String item, Boolean isNew) {}
     @Serdeable
-    public static record Action(String name, Map<String, Object> properties) {}
+    public static record Action(
+      String id,
+      String actionId,
+      Map<String, Object> parameters
+    ) {}
   }
 
   @Serdeable
