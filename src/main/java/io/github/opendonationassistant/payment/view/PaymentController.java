@@ -98,7 +98,11 @@ public class PaymentController extends BaseController {
   }
 
   private PaymentDto.ActionDto convert(Action action) {
-    return new PaymentDto.ActionDto(action.name(), action.properties());
+    return new PaymentDto.ActionDto(
+      action.id(),
+      action.actionId(),
+      action.parameters()
+    );
   }
 
   @Serdeable
@@ -122,8 +126,9 @@ public class PaymentController extends BaseController {
   ) {
     @Serdeable
     public static record ActionDto(
-      String name,
-      Map<String, Object> properties
+      String id,
+      String actionId,
+      Map<String, Object> parameters
     ) {}
 
     @Serdeable

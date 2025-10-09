@@ -1,4 +1,4 @@
-package io.github.opendonationassistant.payment;
+package io.github.opendonationassistant.payment.view;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +8,6 @@ import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.gateway.command.SetGateway;
 import io.github.opendonationassistant.payment.commands.CreatePayment;
 import io.github.opendonationassistant.payment.commands.CreatePayment.CreatePaymentResponse;
-import io.github.opendonationassistant.payment.view.PaymentController;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;

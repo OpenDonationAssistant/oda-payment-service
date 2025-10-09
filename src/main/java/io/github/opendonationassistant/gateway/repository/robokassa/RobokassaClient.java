@@ -11,7 +11,7 @@ import io.micronaut.http.client.annotation.Client;
 @Client(id = "robokassa")
 public interface RobokassaClient {
   @Post(
-    value = "/Merchant/Indexjson.aspx",
+    value = "/Merchant/Index.aspx",
     produces = MediaType.APPLICATION_FORM_URLENCODED
   )
   CompletableFuture<RobokassaInvoice> init(@Body Map<String,String> payment);

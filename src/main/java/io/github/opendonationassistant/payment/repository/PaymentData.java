@@ -82,7 +82,7 @@ public record PaymentData(
   }
 
   @Serdeable
-  public static record Action(String name, Map<String, Object> properties) {}
+  public static record Action(String id, String actionId, Map<String, Object> parameters) {}
 
   @Serdeable
   public static record Auction(String item, Boolean isNew) {}

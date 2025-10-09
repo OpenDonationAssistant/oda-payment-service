@@ -61,7 +61,7 @@ public class CreatePayment {
         )
           .orElseGet(() -> List.of())
           .stream()
-          .map(it -> new PaymentData.Action(it.name(), it.properties()))
+          .map(it -> new PaymentData.Action(it.id(), it.actionId(), it.parameters()))
           .toList();
         final PaymentData.Auction auction = new PaymentData.Auction(
           Optional.ofNullable(command.auction())
