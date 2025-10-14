@@ -7,10 +7,10 @@ import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.model.DataType;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.annotation.Nullable;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import jakarta.annotation.Nullable;
 
 @Serdeable
 @MappedEntity("payment")
@@ -58,7 +58,7 @@ public record PaymentData(
     );
   }
 
-  public PaymentData withStatus(String newStatus){
+  public PaymentData withStatus(String newStatus) {
     return new PaymentData(
       id,
       gateway,
@@ -78,11 +78,14 @@ public record PaymentData(
       actions,
       auction
     );
-
   }
 
   @Serdeable
-  public static record Action(String id, String actionId, Map<String, Object> parameters) {}
+  public static record Action(
+    String id,
+    String actionId,
+    Map<String, Object> parameters
+  ) {}
 
   @Serdeable
   public static record Auction(String item, Boolean isNew) {}

@@ -2,8 +2,8 @@ package io.github.opendonationassistant.gateway.command;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.commons.micronaut.BaseController;
+import io.github.opendonationassistant.events.config.ConfigCommand.PutKeyValue;
 import io.github.opendonationassistant.events.config.ConfigCommandSender;
-import io.github.opendonationassistant.events.config.ConfigPutCommand;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsData;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.micronaut.http.HttpResponse;
@@ -89,7 +89,7 @@ public class SetGateway extends BaseController {
       );
 
     configCommandSender.send(
-      new ConfigPutCommand(
+      new PutKeyValue(
         recipientId.get(),
         "paymentpage",
         "gateway",

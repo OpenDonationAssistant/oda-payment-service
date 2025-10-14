@@ -4,16 +4,16 @@ import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.events.CompletedPaymentNotification;
 import io.github.opendonationassistant.events.PaymentNotificationSender;
+import io.github.opendonationassistant.events.payments.PaymentFacade;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.wordblacklist.WordFilter;
 import io.github.opendonationassistant.wordblacklist.WordFilterRepository;
 import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 @Serdeable
 public class InitedPayment extends Payment {
@@ -46,6 +46,7 @@ public class InitedPayment extends Payment {
             .withAuthorizationTimestamp(Instant.now())
             .withStatus(result);
         log.info("Payment completed", Map.of("context", updatedData));
+        // TODO filter alert notification
         final WordFilter wordFilter = wordFilterRepository.getByRecipientId(
           this.getData().recipientId()
         );
@@ -69,7 +70,19 @@ public class InitedPayment extends Payment {
             updatedData.amount(),
             updatedData.attachments(),
             updatedData.goal(),
-            updatedData.authorizationTimestamp()
+            updatedData.authorizationTimestamp(),
+            "ODA",
+            Optional.ofNullable(this.getData().actions())
+              .orElse(List.of())
+              .stream()
+              .map(action ->
+                new PaymentFacade.ActionRequest(
+                  action.id(),
+                  action.actionId(),
+                  action.parameters()
+                )
+              )
+              .toList()
           )
         );
         final CompletedPayment completed = new CompletedPayment(

@@ -2,8 +2,8 @@ package io.github.opendonationassistant.gateway.command;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.commons.micronaut.BaseController;
+import io.github.opendonationassistant.events.config.ConfigCommand.PutKeyValue;
 import io.github.opendonationassistant.events.config.ConfigCommandSender;
-import io.github.opendonationassistant.events.config.ConfigPutCommand;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -53,7 +53,7 @@ public class ChangeLicense extends BaseController {
     log.info("Processing ChangeLicenseCommand");
 
     configCommandSender.send(
-      new ConfigPutCommand(
+      new PutKeyValue(
         recipientId.get(),
         "paymentpage",
         "gateway",
