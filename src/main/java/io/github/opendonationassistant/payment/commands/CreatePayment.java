@@ -2,6 +2,7 @@ package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.ToString;
+import io.github.opendonationassistant.gateway.Gateway;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.payment.repository.Payment;
@@ -73,7 +74,7 @@ public class CreatePayment {
             .map(it -> it.isNew())
             .orElseGet(() -> true)
         );
-        payments
+        final Payment payment = payments
           .from(
             new PaymentData(
               command.id(),
@@ -94,8 +95,11 @@ public class CreatePayment {
               actions,
               auction
             )
-          )
-          .save();
+          );
+        payment.save();
+        if ("fake".equals(result.gateway())){
+          payment.complete(gateways);
+        }
         return new CreatePaymentResponse(result.operationUrl(), result.token());
       });
   }

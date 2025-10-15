@@ -3,6 +3,7 @@ package io.github.opendonationassistant.gateway;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.github.opendonationassistant.gateway.repository.cryptocloud.CryptoCloud;
 import io.github.opendonationassistant.gateway.repository.cryptocloud.CryptoCloudClient;
+import io.github.opendonationassistant.gateway.repository.fake.FakeGateway;
 import io.github.opendonationassistant.gateway.repository.robokassa.Robokassa;
 import io.github.opendonationassistant.gateway.repository.robokassa.RobokassaClient;
 import io.github.opendonationassistant.gateway.repository.yookassa.YooKassa;
@@ -61,6 +62,8 @@ public class GatewayRepository {
         return new CryptoCloud(cryptoCloudClient, shopId, shopToken);
       case YOOMONEY:
         return new YooMoney(shopId, recipientId, yoomoneyHttpClient, executor);
+      case FAKE:
+        return new FakeGateway();
       default:
         return new YooKassa(shopId, shopToken, yooKassaClient);
     }

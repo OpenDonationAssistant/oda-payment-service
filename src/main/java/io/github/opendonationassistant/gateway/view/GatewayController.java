@@ -1,7 +1,5 @@
 package io.github.opendonationassistant.gateway.view;
 
-import java.util.List;
-
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsData;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.micronaut.http.HttpResponse;
@@ -12,13 +10,17 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
+import java.util.List;
 
 @Controller
 public class GatewayController {
+
   private final GatewayCredentialsDataRepository credentialsRepository;
 
   @Inject
-  public GatewayController(GatewayCredentialsDataRepository credentialsDataRepository){
+  public GatewayController(
+    GatewayCredentialsDataRepository credentialsDataRepository
+  ) {
     this.credentialsRepository = credentialsDataRepository;
   }
 
@@ -37,5 +39,10 @@ public class GatewayController {
   }
 
   @Serdeable
-  public static record GatewayData(String id, String gateway, String type, Boolean enabled) {}
+  public static record GatewayData(
+    String id,
+    String gateway,
+    String type,
+    Boolean enabled
+  ) {}
 }

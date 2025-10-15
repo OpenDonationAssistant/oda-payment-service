@@ -12,6 +12,7 @@ public interface Gateway {
     YOOKASSA,
     YOOMONEY,
     ROBOKASSA,
+    FAKE,
     CRYPTOCLOUD;
 
     public static Type from(String type) {
@@ -19,6 +20,7 @@ public interface Gateway {
         case "robokassa" -> Type.ROBOKASSA;
         case "yoomoney" -> Type.YOOMONEY;
         case "cryptocloud" -> Type.CRYPTOCLOUD;
+        case "fake" -> Type.FAKE;
         default -> Type.YOOKASSA;
       };
     }
