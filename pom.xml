@@ -29,13 +29,8 @@
   <dependencies>
     <dependency>
       <groupId>io.github.opendonationassistant</groupId>
-      <artifactId>oda-commons</artifactId>
-      <version>0.7.67</version>
-    </dependency>
-    <dependency>
-      <groupId>io.github.opendonationassistant</groupId>
       <artifactId>oda-rabbit-conf</artifactId>
-      <version>0.7.67</version>
+      <version>0.8.90</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.uuid</groupId>
