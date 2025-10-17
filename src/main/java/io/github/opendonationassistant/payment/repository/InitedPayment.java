@@ -51,7 +51,7 @@ public class InitedPayment extends Payment {
           this.getData().recipientId()
         );
         log.info(
-          "Sending notification for {}, recipient: {}",
+          "Sending notification",
           Map.of(
             "paymentId",
             updatedData.id(),
