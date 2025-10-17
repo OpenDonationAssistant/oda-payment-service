@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.scheduling.TaskExecutors;
@@ -36,6 +38,7 @@ public class CryptoCloudNotification {
   }
 
   @Post("/notification/cryptocloud")
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
   public void handleCryptocloudEvent(@Body PaymentEvent event) {
