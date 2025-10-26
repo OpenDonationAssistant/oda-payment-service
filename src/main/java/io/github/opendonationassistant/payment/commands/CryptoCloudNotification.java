@@ -42,7 +42,7 @@ public class CryptoCloudNotification {
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
   public void handleCryptocloudEvent(@Body Map<String, Object> event) {
-    MDC.put("context", ToString.asJson(Map.of("event", event)));
+    MDC.put("context", ToString.asJson(event));
     log.info("CryptoCloud Payment Event");
 
     if (!"success".equals(event.get("status"))) {
