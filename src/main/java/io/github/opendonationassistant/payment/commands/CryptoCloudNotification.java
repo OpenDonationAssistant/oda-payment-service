@@ -8,6 +8,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
@@ -41,26 +42,27 @@ public class CryptoCloudNotification {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
-  public void handleCryptocloudEvent(@Body Map<String, Object> event) {
-    MDC.put("context", ToString.asJson(event));
+  public void handleCryptocloudEvent(
+    @Part("invoice_id") String invoice_id,
+    String status
+  ) {
+    MDC.put("context", ToString.asJson(Map.of("invoice_id", invoice_id)));
     log.info("CryptoCloud Payment Event");
 
-    if (!"success".equals(event.get("status"))) {
+    if (!"success".equals(status)) {
       return;
     }
 
     payments
-      .getByGatewayId("INV-%s".formatted(event.get("invoice_id")))
+      .getByGatewayId("INV-%s".formatted(invoice_id))
       .map(payment -> payment.complete(gateways));
   }
 
   @Serdeable
   public static record PaymentEvent(
     String status,
-    @JsonProperty("invoice_id")
-    String invoiceId,
-    @JsonProperty("invoice_info")
-    Invoice invoiceInfo
+    @JsonProperty("invoice_id") String invoiceId,
+    @JsonProperty("invoice_info") Invoice invoiceInfo
   ) {}
 
   @Serdeable
