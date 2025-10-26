@@ -43,7 +43,7 @@ public class CryptoCloudNotification {
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
   public void handleCryptocloudEvent(
-    @Part("invoice_id") String invoice_id,
+    String invoice_id,
     String status
   ) {
     MDC.put("context", ToString.asJson(Map.of("invoice_id", invoice_id)));
