@@ -41,16 +41,16 @@ public class CryptoCloudNotification {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
-  public void handleCryptocloudEvent(@Body PaymentEvent event) {
+  public void handleCryptocloudEvent(@Body Map<String, Object> event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("CryptoCloud Payment Event");
 
-    if (!"success".equals(event.status())) {
+    if (!"success".equals(event.get("status"))) {
       return;
     }
 
     payments
-      .getByGatewayId("INV-%s".formatted(event.invoiceId()))
+      .getByGatewayId("INV-%s".formatted(event.get("invoice_id")))
       .map(payment -> payment.complete(gateways));
   }
 
