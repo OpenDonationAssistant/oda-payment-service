@@ -84,6 +84,7 @@ public record PaymentData(
   public static record Action(
     String id,
     String actionId,
+    Integer amount,
     Map<String, Object> parameters
   ) {}
 

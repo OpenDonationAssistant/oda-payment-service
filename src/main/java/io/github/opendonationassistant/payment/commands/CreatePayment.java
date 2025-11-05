@@ -63,7 +63,12 @@ public class CreatePayment {
           .orElseGet(() -> List.of())
           .stream()
           .map(it ->
-            new PaymentData.Action(it.id(), it.actionId(), it.parameters())
+            new PaymentData.Action(
+              it.id(),
+              it.actionId(),
+              it.amount(),
+              it.parameters()
+            )
           )
           .toList();
         final PaymentData.Auction auction = new PaymentData.Auction(
@@ -74,30 +79,29 @@ public class CreatePayment {
             .map(it -> it.isNew())
             .orElseGet(() -> true)
         );
-        final Payment payment = payments
-          .from(
-            new PaymentData(
-              command.id(),
-              result.gateway(),
-              result.gatewayId(),
-              Optional.ofNullable(command.method()).orElse(""),
-              command.nickname(),
-              command.message(),
-              command.recipientId(),
-              command.amount(),
-              result.token(),
-              command.gatewayCredId(),
-              command.goal(),
-              null,
-              Instant.now(),
-              Payment.Status.INITED.value(),
-              command.attachments(),
-              actions,
-              auction
-            )
-          );
+        final Payment payment = payments.from(
+          new PaymentData(
+            command.id(),
+            result.gateway(),
+            result.gatewayId(),
+            Optional.ofNullable(command.method()).orElse(""),
+            command.nickname(),
+            command.message(),
+            command.recipientId(),
+            command.amount(),
+            result.token(),
+            command.gatewayCredId(),
+            command.goal(),
+            null,
+            Instant.now(),
+            Payment.Status.INITED.value(),
+            command.attachments(),
+            actions,
+            auction
+          )
+        );
         payment.save();
-        if ("fake".equals(result.gateway())){
+        if ("fake".equals(result.gateway())) {
           payment.complete(gateways);
         }
         return new CreatePaymentResponse(result.operationUrl(), result.token());
@@ -125,6 +129,7 @@ public class CreatePayment {
     public static record Action(
       String id,
       String actionId,
+      Integer amount,
       Map<String, Object> parameters
     ) {}
   }

@@ -79,6 +79,7 @@ public class InitedPayment extends Payment {
                 new PaymentFacade.ActionRequest(
                   action.id(),
                   action.actionId(),
+                  action.amount(),
                   action.parameters()
                 )
               )
