@@ -76,6 +76,7 @@ public class SetGateway extends BaseController {
       repository
         .findByRecipient(recipientId.get())
         .stream()
+        .filter(gateway -> gateway.getType().equals(data.getType()))
         .filter(gateway -> gateway.isEnabled())
         .map(gateway -> gateway.toggle())
         .forEach(repository::update);
