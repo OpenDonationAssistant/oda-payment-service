@@ -1,9 +1,11 @@
-package io.github.opendonationassistant.gateway.command;
+package io.github.opendonationassistant;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import io.github.opendonationassistant.gateway.command.DeleteGateway;
 import io.github.opendonationassistant.gateway.command.DeleteGateway.DeleteGatewayCommand;
+import io.github.opendonationassistant.gateway.command.SetGateway;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsData;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.micronaut.core.annotation.NonNull;
@@ -19,7 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @MicronautTest(environments = "allinone")
 @ExtendWith(InstancioExtension.class)
-public class DeleteGatewayTest {
+public class GatewaysTest {
 
   @Inject
   SetGateway setGateway;

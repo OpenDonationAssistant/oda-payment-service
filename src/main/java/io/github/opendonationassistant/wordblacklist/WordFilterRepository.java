@@ -14,16 +14,14 @@ public class WordFilterRepository {
   @Inject
   public WordFilterRepository(WordFilterDataRepository dataRepository) {
     this.dataRepository = dataRepository;
+    this.system = dataRepository
+      .getByRecipientId("system")
+      .stream()
+      .findFirst()
+      .get();
   }
 
   public WordFilter getByRecipientId(String recipientId) {
-    if (system == null) {
-      system = dataRepository
-        .getByRecipientId("system")
-        .stream()
-        .findFirst()
-        .get();
-    }
     final List<String> recipientWords = dataRepository
       .getByRecipientId(recipientId)
       .stream()

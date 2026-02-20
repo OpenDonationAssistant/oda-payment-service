@@ -1,6 +1,6 @@
 package io.github.opendonationassistant.payment.repository;
 
-import io.github.opendonationassistant.events.PaymentNotificationSender;
+import io.github.opendonationassistant.events.payments.PaymentFacade;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.wordblacklist.WordFilterRepository;
 import io.micronaut.serde.annotation.Serdeable;
@@ -11,18 +11,18 @@ public class Payment {
 
   private PaymentData data;
   protected PaymentDataRepository dataRepository;
-  protected PaymentNotificationSender notificationSender;
+  protected PaymentFacade facade;
   protected WordFilterRepository wordFilterRepository;
 
   public Payment(
     PaymentData data,
     PaymentDataRepository dataRepository,
-    PaymentNotificationSender notificationSender,
+    PaymentFacade facade,
     WordFilterRepository wordFilterRepository
   ) {
     this.data = data;
     this.dataRepository = dataRepository;
-    this.notificationSender = notificationSender;
+    this.facade = facade;
     this.wordFilterRepository = wordFilterRepository;
   }
 

@@ -55,9 +55,9 @@ public class Robokassa implements Gateway {
 
         return new InitResponse(
           "robokassa",
-          created.getInvoiceId(),
+          created.invoiceId(),
           "https://auth.robokassa.ru/Merchant/Index/%s".formatted(
-              created.getInvoiceId()
+              created.invoiceId()
             ),
           ""
         );

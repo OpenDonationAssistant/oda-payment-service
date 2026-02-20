@@ -8,7 +8,6 @@ import io.github.opendonationassistant.payment.repository.PaymentData.Action;
 import io.github.opendonationassistant.payment.repository.PaymentData.Auction;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -25,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 
 @Controller
 public class PaymentController extends BaseController {
@@ -46,9 +46,9 @@ public class PaymentController extends BaseController {
     if (ownerId.isEmpty()) {
       return HttpResponse.unauthorized();
     }
-    List<String> statusFilter = StringUtils.isNotEmpty(statuses)
-      ? Arrays.asList(statuses.split(","))
-      : Arrays.asList("completed");
+    List<String> statusFilter = Optional.ofNullable(statuses)
+      .map(it -> Arrays.asList(it.split(",")))
+      .orElseGet(() -> List.of("completed"));
     List<Payment> completedPayments = payments.listByRecipientId(
       ownerId.get(),
       statusFilter
@@ -87,14 +87,14 @@ public class PaymentController extends BaseController {
       data.status(),
       data.attachments(),
       data.actions().stream().map(this::convert).toList(),
-      convert(data.auction())
+      convert(data.auction()).get()
     );
   }
 
-  private PaymentDto.AuctionDto convert(Auction auction) {
-    return Optional.ofNullable(auction)
-      .map(it -> new PaymentDto.AuctionDto(auction.item(), auction.isNew()))
-      .orElse(null);
+  private Optional<PaymentDto.AuctionDto> convert(@Nullable Auction auction) {
+    return Optional.ofNullable(auction).map(it ->
+      new PaymentDto.AuctionDto(it.item(), it.isNew())
+    );
   }
 
   private PaymentDto.ActionDto convert(Action action) {
@@ -115,14 +115,14 @@ public class PaymentController extends BaseController {
     String message,
     String recipientId,
     Amount amount,
-    String confirmation,
+    @Nullable String confirmation,
     String gatewayCredentialId,
-    String goal,
-    Instant authorizationTimestamp,
+    @Nullable String goal,
+    @Nullable Instant authorizationTimestamp,
     String status,
     List<String> attachments,
     List<ActionDto> actions,
-    AuctionDto auction
+    @Nullable AuctionDto auction
   ) {
     @Serdeable
     public static record ActionDto(

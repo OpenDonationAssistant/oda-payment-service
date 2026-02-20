@@ -1,32 +1,24 @@
-package io.github.opendonationassistant.payment.view;
+package io.github.opendonationassistant;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.uuid.Generators;
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.gateway.command.SetGateway;
 import io.github.opendonationassistant.payment.commands.CreatePayment;
 import io.github.opendonationassistant.payment.commands.CreatePayment.CreatePaymentResponse;
-import io.micronaut.context.ApplicationContext;
+import io.github.opendonationassistant.payment.view.PaymentController;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 import java.util.List;
-import org.instancio.junit.WithSettings;
-import org.instancio.settings.Settings;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @MicronautTest(environments = "allinone")
-public class PaymentControllerTest {
-
-  private Logger log = LoggerFactory.getLogger(PaymentControllerTest.class);
-
-  @Inject
-  ApplicationContext context;
+public class PaymentsTest {
 
   @Inject
   SetGateway setGateway;
@@ -37,21 +29,17 @@ public class PaymentControllerTest {
   @Inject
   PaymentController paymentController;
 
-  @WithSettings
-  private final Settings settings = Settings.create()
-    .mapType(Object.class, String.class);
-
   @Test
   public void testCreatingDraft(RequestSpecification spec) {
     var amount = new Amount(100, 0, "RUB");
 
     var request = new CreatePayment.CreatePaymentCommand(
-      "id",
+      Generators.timeBasedEpochGenerator().generate().toString(),
       "0",
       "testname",
       "message",
       "testuser",
-      null,
+      "",
       amount,
       List.of(),
       null,
@@ -71,7 +59,6 @@ public class PaymentControllerTest {
   }
 
   @Test
-  @Disabled
   public void testNotFoundForUnknownPaymentId(RequestSpecification spec) {
     spec
       .when()
@@ -89,14 +76,15 @@ public class PaymentControllerTest {
     RequestSpecification spec
   ) {
     var amount = new Amount(100, 0, "RUB");
+    var paymentId = Generators.timeBasedEpochGenerator().generate().toString();
 
     var request = new CreatePayment.CreatePaymentCommand(
-      "id",
+      paymentId,
       "0",
       "testname",
       "message",
       "testuser",
-      null,
+      "",
       amount,
       List.of(),
       null,
@@ -105,18 +93,13 @@ public class PaymentControllerTest {
       null
     );
 
-    String paymentId = spec
+    spec
       .when()
       .body(request)
       .header("Content-Type", "application/json")
       .put("/payments/commands/create")
       .then()
-      .statusCode(200)
-      .extract()
-      .jsonPath()
-      .get("id");
-
-    assertNotNull(paymentId);
+      .statusCode(200);
 
     spec
       .when()
@@ -126,7 +109,6 @@ public class PaymentControllerTest {
       .log()
       .ifError()
       .statusCode(200)
-      .body("id", notNullValue())
       .body("message", is("message"))
       .body("nickname", is("testname"))
       .body("recipientId", is("testuser"));

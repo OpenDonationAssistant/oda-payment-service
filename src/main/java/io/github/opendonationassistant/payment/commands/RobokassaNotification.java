@@ -51,7 +51,7 @@ public class RobokassaNotification {
     log.info("Robokassa Payment Event");
     MDC.clear();
 
-    payments.getById(id).map(payment -> payment.complete(gateways));
+    payments.getById(id).ifPresent(payment -> payment.complete(gateways));
     return "OK%s".formatted(invoice);
   }
 }

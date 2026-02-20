@@ -2,7 +2,6 @@ package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.gateway.Gateway;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
 import io.github.opendonationassistant.gateway.GatewayRepository;
 import io.github.opendonationassistant.payment.repository.Payment;
@@ -14,13 +13,13 @@ import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -71,14 +70,9 @@ public class CreatePayment {
             )
           )
           .toList();
-        final PaymentData.Auction auction = new PaymentData.Auction(
-          Optional.ofNullable(command.auction())
-            .map(it -> it.item())
-            .orElseGet(() -> ""),
-          Optional.ofNullable(command.auction())
-            .map(it -> it.isNew())
-            .orElseGet(() -> true)
-        );
+        final Optional<PaymentData.Auction> auction = Optional.ofNullable(
+          command.vote()
+        ).map(it -> new PaymentData.Auction(it.id(), it.item(), it.isNew()));
         final Payment payment = payments.from(
           new PaymentData(
             command.id(),
@@ -97,7 +91,7 @@ public class CreatePayment {
             Payment.Status.INITED.value(),
             command.attachments(),
             actions,
-            auction
+            auction.get()
           )
         );
         payment.save();
@@ -118,13 +112,17 @@ public class CreatePayment {
     String method,
     Amount amount,
     List<String> attachments,
-    String goal,
+    @Nullable String goal,
     List<Action> actions,
-    Auction auction,
+    @Nullable Vote vote,
     @Nullable String marker
   ) {
     @Serdeable
-    public static record Auction(String item, Boolean isNew) {}
+    public static record Vote(
+      @Nullable String id,
+      @Nullable String item,
+      Boolean isNew
+    ) {}
     @Serdeable
     public static record Action(
       String id,
@@ -136,7 +134,7 @@ public class CreatePayment {
 
   @Serdeable
   public static record CreatePaymentResponse(
-    String operationUrl,
+    @Nullable String operationUrl,
     String token
   ) {}
 }

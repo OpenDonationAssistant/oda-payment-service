@@ -1,6 +1,7 @@
 package io.github.opendonationassistant.payment.repository;
 
-import io.github.opendonationassistant.events.PaymentNotificationSender;
+import io.github.opendonationassistant.events.payments.PaymentFacade;
+import io.github.opendonationassistant.integration.MediaService;
 import io.github.opendonationassistant.wordblacklist.WordFilterRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -10,19 +11,22 @@ import java.util.Optional;
 @Singleton
 public class PaymentRepository {
 
-  private PaymentDataRepository dataRepository;
-  private PaymentNotificationSender notificationSender;
-  private WordFilterRepository wordFilterRepository;
+  private final PaymentDataRepository dataRepository;
+  private final PaymentFacade facade;
+  private final WordFilterRepository wordFilterRepository;
+  private final MediaService mediaService;
 
   @Inject
   public PaymentRepository(
     PaymentDataRepository dataRepository,
-    PaymentNotificationSender notificationSender,
-    WordFilterRepository wordFilterRepository
+    PaymentFacade facade,
+    WordFilterRepository wordFilterRepository,
+    MediaService mediaService
   ) {
     this.dataRepository = dataRepository;
-    this.notificationSender = notificationSender;
+    this.facade = facade;
     this.wordFilterRepository = wordFilterRepository;
+    this.mediaService = mediaService;
   }
 
   public Optional<Payment> getById(String id) {
@@ -52,15 +56,16 @@ public class PaymentRepository {
       return new CompletedPayment(
         data,
         dataRepository,
-        notificationSender,
+        facade,
         wordFilterRepository
       );
     } else {
       return new InitedPayment(
         data,
         dataRepository,
-        notificationSender,
-        wordFilterRepository
+        facade,
+        wordFilterRepository,
+        mediaService
       );
     }
   }

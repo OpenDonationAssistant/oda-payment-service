@@ -7,13 +7,16 @@ import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.model.DataType;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.annotation.Nullable;
+import io.micronaut.sourcegen.annotations.Wither;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
+
 @Serdeable
 @MappedEntity("payment")
+@Wither
 public record PaymentData(
   @Id String id,
   String gateway,
@@ -31,55 +34,10 @@ public record PaymentData(
   String status,
   @MappedProperty(converter = StringListConverter.class)
   List<String> attachments,
-  @MappedProperty(type = DataType.JSON) @Nullable List<Action> actions,
+  @MappedProperty(type = DataType.JSON) List<Action> actions,
   @MappedProperty(type = DataType.JSON) @Nullable Auction auction
-) {
-  public PaymentData withAuthorizationTimestamp(
-    Instant newAuthorizationTimestamp
-  ) {
-    return new PaymentData(
-      id,
-      gateway,
-      gatewayId,
-      method,
-      nickname,
-      message,
-      recipientId,
-      amount,
-      confirmation,
-      gatewayCredentialId,
-      goal,
-      newAuthorizationTimestamp,
-      creationTimestamp,
-      status,
-      attachments,
-      actions,
-      auction
-    );
-  }
-
-  public PaymentData withStatus(String newStatus) {
-    return new PaymentData(
-      id,
-      gateway,
-      gatewayId,
-      method,
-      nickname,
-      message,
-      recipientId,
-      amount,
-      confirmation,
-      gatewayCredentialId,
-      goal,
-      authorizationTimestamp,
-      creationTimestamp,
-      newStatus,
-      attachments,
-      actions,
-      auction
-    );
-  }
-
+)
+  implements PaymentDataWither {
   @Serdeable
   public static record Action(
     String id,
@@ -89,5 +47,9 @@ public record PaymentData(
   ) {}
 
   @Serdeable
-  public static record Auction(String item, Boolean isNew) {}
+  public static record Auction(
+    @Nullable String id,
+    String item,
+    Boolean isNew
+  ) {}
 }

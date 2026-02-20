@@ -4,6 +4,8 @@ import io.github.opendonationassistant.commons.Amount;
 import io.micronaut.serde.annotation.Serdeable;
 import java.util.concurrent.CompletableFuture;
 
+import org.jspecify.annotations.Nullable;
+
 public interface Gateway {
   CompletableFuture<InitResponse> init(InitPaymentParams params);
   CompletableFuture<String> status(String gatewayId);
@@ -37,7 +39,7 @@ public interface Gateway {
   public static record InitResponse(
     String gateway,
     String gatewayId,
-    String operationUrl,
+    @Nullable String operationUrl,
     String token
   ) {}
 }

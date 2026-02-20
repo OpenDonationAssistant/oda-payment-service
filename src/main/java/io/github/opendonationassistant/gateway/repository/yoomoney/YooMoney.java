@@ -1,6 +1,7 @@
 package io.github.opendonationassistant.gateway.repository.yoomoney;
 
 import io.github.opendonationassistant.commons.ToString;
+import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.gateway.Gateway;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
@@ -15,7 +16,7 @@ import org.slf4j.MDC;
 
 public class YooMoney implements Gateway {
 
-  private Logger log = LoggerFactory.getLogger(YooMoney.class);
+  private ODALogger log = new ODALogger(this);
 
   public final HttpClient httpClient;
   public final Executor executor;
@@ -59,18 +60,15 @@ public class YooMoney implements Gateway {
     ).thenApply(response -> {
       var operationUrl = response.getHeaders().get("location");
 
-      MDC.put(
-        "context",
-        ToString.asJson(
-          Map.of(
-            "responseCode",
-            response.getStatus().getCode(),
-            "location",
-            operationUrl
-          )
+      log.info(
+        "Received YooMoney Response",
+        Map.of(
+          "responseCode",
+          response.getStatus().getCode(),
+          "location",
+          operationUrl
         )
       );
-      log.info("Received YooMoney Response");
 
       return new InitResponse("yoomoney", "", operationUrl, "");
     });

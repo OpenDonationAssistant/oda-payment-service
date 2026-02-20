@@ -47,6 +47,6 @@ public class CryptoCloudNotification {
 
     payments
       .getByGatewayId("INV-%s".formatted(invoice_id))
-      .map(payment -> payment.complete(gateways));
+      .ifPresent(payment -> payment.complete(gateways));
   }
 }

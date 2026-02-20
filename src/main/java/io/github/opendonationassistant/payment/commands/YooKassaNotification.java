@@ -2,7 +2,7 @@ package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
 import io.github.opendonationassistant.gateway.GatewayRepository;
-import io.github.opendonationassistant.gateway.repository.yookassa.client.YooKassaPayment;
+import io.github.opendonationassistant.integration.YooKassaClient.YooKassaPayment;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -47,8 +47,8 @@ public class YooKassaNotification {
     }
 
     payments
-      .getByGatewayId(event.object().getId())
-      .map(payment -> payment.complete(gateways));
+      .getByGatewayId(event.object().id())
+      .ifPresent(payment -> payment.complete(gateways));
   }
 
   @Serdeable
