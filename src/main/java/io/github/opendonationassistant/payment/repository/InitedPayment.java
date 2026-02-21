@@ -106,7 +106,7 @@ public class InitedPayment extends Payment {
                     auction.isNew()
                   )
                 )
-                .get()
+                .orElse(null)
             )
           )
           .thenApply(ignored -> {

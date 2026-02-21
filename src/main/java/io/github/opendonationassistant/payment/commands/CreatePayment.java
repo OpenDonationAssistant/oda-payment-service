@@ -91,7 +91,7 @@ public class CreatePayment {
             Payment.Status.INITED.value(),
             command.attachments(),
             actions,
-            auction.get()
+            auction.orElse(null)
           )
         );
         payment.save();

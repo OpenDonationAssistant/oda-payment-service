@@ -49,7 +49,7 @@ public record PaymentData(
   @Serdeable
   public static record Auction(
     @Nullable String id,
-    String item,
+    @Nullable String item,
     Boolean isNew
   ) {}
 }

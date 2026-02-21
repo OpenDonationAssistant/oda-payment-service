@@ -1,6 +1,6 @@
 package io.github.opendonationassistant.gateway.command;
 
-import io.github.opendonationassistant.commons.ToString;
+import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.commons.micronaut.BaseController;
 import io.github.opendonationassistant.events.config.ConfigCommand.PutKeyValue;
 import io.github.opendonationassistant.events.config.ConfigCommandSender;
@@ -16,14 +16,11 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 @Controller
 public class ChangeLicense extends BaseController {
 
-  private Logger log = LoggerFactory.getLogger(ChangeLicense.class);
+  private ODALogger log = new ODALogger(this);
 
   private ConfigCommandSender configCommandSender;
 
@@ -44,13 +41,10 @@ public class ChangeLicense extends BaseController {
       return HttpResponse.unauthorized();
     }
 
-    MDC.put(
-      "context",
-      ToString.asJson(
-        Map.of("command", command, "recipientId", recipientId.get())
-      )
+    log.info(
+      "Processing ChangeLicenseCommand",
+      Map.of("command", command, "recipientId", recipientId.get())
     );
-    log.info("Processing ChangeLicenseCommand");
 
     configCommandSender.send(
       new PutKeyValue(

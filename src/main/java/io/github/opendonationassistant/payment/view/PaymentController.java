@@ -8,7 +8,6 @@ import io.github.opendonationassistant.payment.repository.PaymentData.Action;
 import io.github.opendonationassistant.payment.repository.PaymentData.Auction;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -87,7 +86,7 @@ public class PaymentController extends BaseController {
       data.status(),
       data.attachments(),
       data.actions().stream().map(this::convert).toList(),
-      convert(data.auction()).get()
+      convert(data.auction()).orElse(null)
     );
   }
 
@@ -132,6 +131,6 @@ public class PaymentController extends BaseController {
     ) {}
 
     @Serdeable
-    public static record AuctionDto(String item, Boolean isNew) {}
+    public static record AuctionDto(@Nullable String item, Boolean isNew) {}
   }
 }
