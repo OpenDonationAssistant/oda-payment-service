@@ -98,7 +98,7 @@ public class CreatePayment {
         if ("fake".equals(result.gateway())) {
           return payment
             .complete(gateways)
-            .thenApply(it -> new CreatePaymentResponse("", ""));
+            .thenApply(it -> new CreatePaymentResponse(result.operationUrl(), result.token()));
         }
         return CompletableFuture.completedFuture(
           new CreatePaymentResponse(result.operationUrl(), result.token())
