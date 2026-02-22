@@ -55,7 +55,7 @@ public class CreatePayment {
           command.amount()
         )
       )
-      .thenApply(result -> {
+      .thenCompose(result -> {
         final List<PaymentData.Action> actions = Optional.ofNullable(
           command.actions()
         )
@@ -96,9 +96,13 @@ public class CreatePayment {
         );
         payment.save();
         if ("fake".equals(result.gateway())) {
-          payment.complete(gateways);
+          return payment
+            .complete(gateways)
+            .thenApply(it -> new CreatePaymentResponse("", ""));
         }
-        return new CreatePaymentResponse(result.operationUrl(), result.token());
+        return CompletableFuture.completedFuture(
+          new CreatePaymentResponse(result.operationUrl(), result.token())
+        );
       });
   }
 
