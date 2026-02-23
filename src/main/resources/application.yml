@@ -1,5 +1,8 @@
 problem.stack-trace: false
 micronaut:
+  serde:
+    serialization:
+      inclusion: ALWAYS
   application:
     name: oda-payment-service
   problem.stack-trace: false

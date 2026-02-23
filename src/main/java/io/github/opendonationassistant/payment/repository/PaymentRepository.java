@@ -14,7 +14,6 @@ public class PaymentRepository {
   private final PaymentDataRepository dataRepository;
   private final PaymentFacade facade;
   private final WordFilterRepository wordFilterRepository;
-  private final MediaService mediaService;
 
   @Inject
   public PaymentRepository(
@@ -26,7 +25,6 @@ public class PaymentRepository {
     this.dataRepository = dataRepository;
     this.facade = facade;
     this.wordFilterRepository = wordFilterRepository;
-    this.mediaService = mediaService;
   }
 
   public Optional<Payment> getById(String id) {
