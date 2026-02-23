@@ -1,9 +1,12 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.Amount;
-import io.github.opendonationassistant.commons.ToString;
+import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
 import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.integration.MediaService;
+import io.github.opendonationassistant.integration.MediaService.LinkPaymentCommand;
+import io.github.opendonationassistant.integration.MediaService.LinkPaymentResponse;
 import io.github.opendonationassistant.payment.repository.Payment;
 import io.github.opendonationassistant.payment.repository.PaymentData;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
@@ -20,22 +23,25 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.jspecify.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 @Controller
 public class CreatePayment {
 
-  private final Logger log = LoggerFactory.getLogger(CreatePayment.class);
+  private final ODALogger log = new ODALogger(this);
 
   private final GatewayRepository gateways;
   private final PaymentRepository payments;
+  private final MediaService mediaService;
 
   @Inject
-  public CreatePayment(GatewayRepository gateways, PaymentRepository payments) {
+  public CreatePayment(
+    GatewayRepository gateways,
+    PaymentRepository payments,
+    MediaService mediaService
+  ) {
     this.gateways = gateways;
     this.payments = payments;
+    this.mediaService = mediaService;
   }
 
   @Put("/payments/commands/create")
@@ -43,17 +49,33 @@ public class CreatePayment {
   public CompletableFuture<CreatePaymentResponse> createDraft(
     @Body CreatePaymentCommand command
   ) {
-    MDC.put("context", ToString.asJson(Map.of("command", command)));
-    log.info("Processing CreatePaymentCommand");
+    log.info("Processing CreatePaymentCommand", Map.of("command", command));
 
-    return gateways
-      .get(command.recipientId(), command.gatewayCredId())
-      .init(
-        new InitPaymentParams(
-          command.recipientId(),
-          command.id(),
-          command.amount()
+    final CompletableFuture<Amount> requiredAmount = command
+        .attachments()
+        .isEmpty()
+      ? CompletableFuture.completedFuture(new Amount(0, 0, "RUB"))
+      : mediaService
+        .linkPayment(
+          new LinkPaymentCommand(
+            command.recipientId(),
+            command.id(),
+            command.attachments()
+          )
         )
+        .thenApply(LinkPaymentResponse::requiredAmount);
+
+    return requiredAmount
+      .thenCompose(amount ->
+        gateways
+          .get(command.recipientId(), command.gatewayCredId())
+          .init(
+            new InitPaymentParams(
+              command.recipientId(),
+              command.id(),
+              command.amount()
+            )
+          )
       )
       .thenCompose(result -> {
         final List<PaymentData.Action> actions = Optional.ofNullable(
@@ -98,7 +120,9 @@ public class CreatePayment {
         if ("fake".equals(result.gateway())) {
           return payment
             .complete(gateways)
-            .thenApply(it -> new CreatePaymentResponse(result.operationUrl(), result.token()));
+            .thenApply(it ->
+              new CreatePaymentResponse(result.operationUrl(), result.token())
+            );
         }
         return CompletableFuture.completedFuture(
           new CreatePaymentResponse(result.operationUrl(), result.token())

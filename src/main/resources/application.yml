@@ -20,6 +20,7 @@ micronaut:
       expire-after-write: 240h
   http.services.yoomoney.url: https://api.yookassa.ru
   http.services.cryptocloud.url: https://api.cryptocloud.plus
+  http.services.media.url: http://media-service/
   http.services.fundraising:
     url: https://yoomoney.ru
     follow-redirects: false

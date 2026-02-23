@@ -64,8 +64,7 @@ public class PaymentRepository {
         data,
         dataRepository,
         facade,
-        wordFilterRepository,
-        mediaService
+        wordFilterRepository
       );
     }
   }

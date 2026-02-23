@@ -18,35 +18,22 @@ import java.util.concurrent.CompletableFuture;
 public class InitedPayment extends Payment {
 
   private final ODALogger log = new ODALogger(this);
-  private final MediaService mediaService;
 
   public InitedPayment(
     PaymentData data,
     PaymentDataRepository dataRepository,
     PaymentFacade facade,
-    WordFilterRepository wordFilterRepository,
-    MediaService mediaService
+    WordFilterRepository wordFilterRepository
   ) {
     super(data, dataRepository, facade, wordFilterRepository);
-    this.mediaService = mediaService;
   }
 
   public CompletableFuture<Payment> complete(GatewayRepository gateways) {
     log.info("Authorizing payment", Map.of("payment", this));
     final PaymentData payment = this.getData();
-    return mediaService
-      .linkPayment(
-        new LinkPaymentCommand(
-          payment.recipientId(),
-          payment.id(),
-          payment.attachments()
-        )
-      )
-      .thenCompose(response ->
-        gateways
-          .get(payment.recipientId(), payment.gatewayCredentialId())
-          .status(payment.gatewayId())
-      )
+    return gateways
+        .get(payment.recipientId(), payment.gatewayCredentialId())
+        .status(payment.gatewayId())
       .thenCompose(status -> {
         // TODO: check status
         var result = "completed".equals(status) ? "completed" : "failed";
