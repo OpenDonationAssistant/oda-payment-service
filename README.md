@@ -1,3 +1,6 @@
+# ODA Payment Service
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/OpenDonationAssistant/oda-payment-service)
+
 ## Micronaut 4.2.2 Documentation
 
 - [User Guide](https://docs.micronaut.io/4.2.2/guide/index.html)
