@@ -1,63 +1,70 @@
 # ODA Payment Service
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/OpenDonationAssistant/oda-payment-service)
 
-## Micronaut 4.2.2 Documentation
-
-- [User Guide](https://docs.micronaut.io/4.2.2/guide/index.html)
-- [API Reference](https://docs.micronaut.io/4.2.2/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/4.2.2/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
 
-- [Micronaut Maven Plugin documentation](https://micronaut-projects.github.io/micronaut-maven-plugin/latest/)
-## Feature serialization-jackson documentation
+## Running with Docker
 
-- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
+The service is published as a Docker image to GitHub Container Registry.
 
+### Pull and Run
 
-## Feature microstream documentation
+```bash
+docker pull ghcr.io/opendonationassistant/oda-payment-service:latest
 
-- [Micronaut MicroStream documentation](https://micronaut-projects.github.io/micronaut-microstream/latest/guide)
+docker run -d \
+  --name oda-payment-service \
+  -e RABBITMQ_HOST=<rabbitmq-host> \
+  -e JDBC_URL=<jdbc-url> \
+  -e JDBC_USER=<db-username> \
+  -e JDBC_PASSWORD=<db-password> \
+  -p 8080:8080 \
+  ghcr.io/opendonationassistant/oda-payment-service:latest
+```
 
-- [https://microstream.one/](https://microstream.one/)
+### Required Environment Variables
 
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `RABBITMQ_HOST` | RabbitMQ server hostname | `localhost` |
+| `JDBC_URL` | PostgreSQL JDBC connection URL | `jdbc:postgresql://localhost:5432/postgres?currentSchema=payment` |
+| `JDBC_USER` | Database username | `postgres` |
+| `JDBC_PASSWORD` | Database password | `postgres` |
 
-## Feature rabbitmq documentation
+### Example docker-compose.yml
 
-- [Micronaut RabbitMQ Messaging documentation](https://micronaut-projects.github.io/micronaut-rabbitmq/latest/guide/index.html)
+```yaml
+version: '3.8'
+services:
+  payment-service:
+    image: ghcr.io/opendonationassistant/oda-payment-service:latest
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - JDBC_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=payment
+      - JDBC_USER=postgres
+      - JDBC_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
 
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
-## Feature micronaut-test-rest-assured documentation
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
-- [Micronaut Micronaut-Test REST-assured documentation](https://micronaut-projects.github.io/micronaut-test/latest/guide/#restAssured)
-
-- [https://rest-assured.io/#docs](https://rest-assured.io/#docs)
-
-
-## Feature test-resources documentation
-
-- [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
-
-
-## Feature micronaut-aot documentation
-
-- [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
-
-
-## Feature openapi documentation
-
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
-
-- [https://www.openapis.org](https://www.openapis.org)
-
-
-## Feature security-jwt documentation
-
-- [Micronaut Security JWT documentation](https://micronaut-projects.github.io/micronaut-security/latest/guide/index.html)
-
-
-## Feature maven-enforcer-plugin documentation
-
-- [https://maven.apache.org/enforcer/maven-enforcer-plugin/](https://maven.apache.org/enforcer/maven-enforcer-plugin/)
+volumes:
+  postgres-data:
+```
 
 
