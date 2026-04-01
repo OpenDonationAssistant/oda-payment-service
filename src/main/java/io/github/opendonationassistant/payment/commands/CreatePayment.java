@@ -55,7 +55,7 @@ public class CreatePayment {
   ) {
     log.info("Processing CreatePaymentCommand", Map.of("command", command));
 
-    final CompletableFuture<Amount> requiredAmount = command.attachments().isEmpty()
+    CompletableFuture<Amount> requiredAmount = command.attachments().isEmpty()
       ? CompletableFuture.completedFuture(new Amount(0, 0, "RUB"))
       : mediaService
         .linkPayment(
@@ -68,7 +68,7 @@ public class CreatePayment {
         .thenApply(LinkPaymentResponse::requiredAmount);
 
     if (!command.actions().isEmpty()) {
-      requiredAmount.thenCombine(
+      requiredAmount = requiredAmount.thenCombine(
         actionsService.linkPayment(
           new ActionsService.LinkActionsRequest(
             "payment",
