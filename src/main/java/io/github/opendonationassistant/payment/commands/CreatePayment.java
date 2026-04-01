@@ -4,6 +4,7 @@ import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
 import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.integration.ActionsService;
 import io.github.opendonationassistant.integration.MediaService;
 import io.github.opendonationassistant.integration.MediaService.LinkPaymentCommand;
 import io.github.opendonationassistant.integration.MediaService.LinkPaymentResponse;
@@ -32,16 +33,19 @@ public class CreatePayment {
   private final GatewayRepository gateways;
   private final PaymentRepository payments;
   private final MediaService mediaService;
+  private final ActionsService actionsService;
 
   @Inject
   public CreatePayment(
     GatewayRepository gateways,
     PaymentRepository payments,
-    MediaService mediaService
+    MediaService mediaService,
+    ActionsService actionsService
   ) {
     this.gateways = gateways;
     this.payments = payments;
     this.mediaService = mediaService;
+    this.actionsService = actionsService;
   }
 
   @Put("/payments/commands/create")
@@ -51,9 +55,7 @@ public class CreatePayment {
   ) {
     log.info("Processing CreatePaymentCommand", Map.of("command", command));
 
-    final CompletableFuture<Amount> requiredAmount = command
-        .attachments()
-        .isEmpty()
+    final CompletableFuture<Amount> requiredAmount = command.attachments().isEmpty()
       ? CompletableFuture.completedFuture(new Amount(0, 0, "RUB"))
       : mediaService
         .linkPayment(
@@ -64,6 +66,25 @@ public class CreatePayment {
           )
         )
         .thenApply(LinkPaymentResponse::requiredAmount);
+
+    if (!command.actions().isEmpty()) {
+      requiredAmount.thenCombine(
+        actionsService.linkPayment(
+          new ActionsService.LinkActionsRequest(
+            "payment",
+            command.id(),
+            command
+              .actions()
+              .stream()
+              .map(it ->
+                new ActionsService.ActionRequest(it.actionId(), it.amount())
+              )
+              .toList()
+          )
+        ),
+        (amount, _) -> amount
+      );
+    }
 
     return requiredAmount
       .thenCompose(amount ->
