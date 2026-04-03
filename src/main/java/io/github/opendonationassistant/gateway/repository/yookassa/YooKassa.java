@@ -53,7 +53,7 @@ public class YooKassa implements Gateway {
     var payment = new YooKassaPaymentRequest(
       yooMoneyAmount,
       confirmation,
-      false,
+      true,
       "false"
     );
 
