@@ -32,8 +32,8 @@ public class InitedPayment extends Payment {
     log.info("Authorizing payment", Map.of("payment", this));
     final PaymentData payment = this.getData();
     return gateways
-        .get(payment.recipientId(), payment.gatewayCredentialId())
-        .status(payment.gatewayId())
+      .get(payment.recipientId(), payment.gatewayCredentialId())
+      .status(payment.gatewayId())
       .thenCompose(status -> {
         // TODO: check status
         var result = "completed".equals(status) ? "completed" : "failed";
