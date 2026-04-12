@@ -6,6 +6,7 @@ import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
@@ -30,6 +31,10 @@ public class CryptoCloudNotification {
     this.payments = payments;
     this.gateways = gateways;
   }
+
+  @Get("/notification/cryptocloud")
+  @Secured(SecurityRule.IS_ANONYMOUS)
+  public void emptyResponse(){}
 
   @Post("/notification/cryptocloud")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
