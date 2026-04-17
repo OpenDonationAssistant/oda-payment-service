@@ -34,7 +34,7 @@ public class CryptoCloudNotification {
 
   @Get("/notification/cryptocloud")
   @Secured(SecurityRule.IS_ANONYMOUS)
-  public void emptyResponse(){}
+  public void emptyResponse() {}
 
   @Post("/notification/cryptocloud")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
