@@ -32,13 +32,16 @@ micronaut:
 endpoints:
   flyway:
     enabled: true
+datasources:
+  default:
+    schema: 'payment'
 flyway:
   datasources:
     default:
       enabled: true
       baseline-on-migrate: true
-      schemas: 'donationgoal'
-      default-schema: 'donationgoal'
+      schemas: 'payment'
+      default-schema: 'payment'
 jpa:
   default:
     entity-scan:
