@@ -11,6 +11,7 @@ import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.inject.Inject;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class RobokassaNotification {
   @Get(value = "/notification/robokassa", produces = MediaType.TEXT_PLAIN)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
+  @Operation(hidden = true)
   public String handleRobokassaEvent(
     @QueryValue("SignatureValue") String signature,
     @QueryValue("SHP_ID") String id,

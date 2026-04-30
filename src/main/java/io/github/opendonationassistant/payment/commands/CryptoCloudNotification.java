@@ -12,6 +12,7 @@ import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.inject.Inject;
 import java.util.Map;
 
@@ -34,12 +35,14 @@ public class CryptoCloudNotification {
 
   @Get("/notification/cryptocloud")
   @Secured(SecurityRule.IS_ANONYMOUS)
+  @Operation(hidden = true)
   public void emptyResponse() {}
 
   @Post("/notification/cryptocloud")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
+  @Operation(hidden = true)
   public void handleCryptocloudEvent(String invoice_id, String status) {
     log.info(
       "CryptoCloud Payment Event",

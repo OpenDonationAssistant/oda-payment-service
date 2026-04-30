@@ -12,6 +12,7 @@ import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.inject.Inject;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class YooKassaNotification {
   @Post("/notification/yookassa")
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
+  @Operation(hidden = true)
   public void handleYookassaEvent(@Body PaymentEvent event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("YooKassa Payment Event");

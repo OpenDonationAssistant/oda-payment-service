@@ -11,6 +11,7 @@ import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class YooMoneyNotification {
   )
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
+  @Operation(hidden = true)
   public void handleYooMoneyEvent(@Body Map<String, Object> event) {
     MDC.put("context", ToString.asJson(Map.of("event", event)));
     log.info("YooMoney Payment Event");
