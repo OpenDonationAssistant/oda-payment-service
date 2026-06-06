@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -23,12 +23,12 @@ import org.slf4j.MDC;
 public class YooMoneyNotification {
 
   private Logger log = LoggerFactory.getLogger(YooMoneyNotification.class);
-  private GatewayRepository gateways;
+  private AbstractGatewayRepository gateways;
   private PaymentRepository payments;
 
   @Inject
   public YooMoneyNotification(
-    GatewayRepository gateways,
+    AbstractGatewayRepository gateways,
     PaymentRepository payments
   ) {
     this.gateways = gateways;

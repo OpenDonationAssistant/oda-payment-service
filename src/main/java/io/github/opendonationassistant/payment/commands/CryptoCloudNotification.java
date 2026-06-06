@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.logging.ODALogger;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
@@ -22,12 +22,12 @@ public class CryptoCloudNotification {
   private final ODALogger log = new ODALogger(this);
 
   private final PaymentRepository payments;
-  private final GatewayRepository gateways;
+  private final AbstractGatewayRepository gateways;
 
   @Inject
   public CryptoCloudNotification(
     PaymentRepository payments,
-    GatewayRepository gateways
+    AbstractGatewayRepository gateways
   ) {
     this.payments = payments;
     this.gateways = gateways;

@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -22,11 +22,11 @@ public class CompletePayment {
   private Logger log = LoggerFactory.getLogger(CompletePayment.class);
 
   private PaymentRepository payments;
-  private GatewayRepository gateways;
+  private AbstractGatewayRepository gateways;
 
   public CompletePayment(
     PaymentRepository payments,
-    GatewayRepository gateways
+    AbstractGatewayRepository gateways
   ) {
     this.gateways = gateways;
     this.payments = payments;
