@@ -4,7 +4,9 @@ import io.github.opendonationassistant.gateway.view.GatewayController.GatewayDat
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
+import io.micronaut.data.model.DataType;
 import io.micronaut.serde.annotation.Serdeable;
+import java.util.Map;
 
 @Serdeable
 @MappedEntity("credentials")
@@ -18,8 +20,13 @@ public class GatewayCredentialsData {
   private String token;
   private String gateway;
   private String secret;
+
+  @MappedProperty(value = "settings", type = DataType.JSON)
+  private Map<String, String> settings;
+
   @MappedProperty("gateway_type")
   private String type;
+
   private boolean enabled;
 
   public GatewayCredentialsData(
@@ -29,6 +36,7 @@ public class GatewayCredentialsData {
     String token,
     String gateway,
     String secret,
+    Map<String, String> settings,
     String type,
     boolean enabled
   ) {
@@ -39,6 +47,7 @@ public class GatewayCredentialsData {
     this.gateway = gateway;
     this.secret = secret;
     this.enabled = enabled;
+    this.settings = settings;
     this.type = type;
   }
 
@@ -50,6 +59,7 @@ public class GatewayCredentialsData {
       token,
       gateway,
       secret,
+      settings,
       type,
       !enabled
     );
@@ -79,12 +89,16 @@ public class GatewayCredentialsData {
     return gateway;
   }
 
-  public String getType(){
+  public String getType() {
     return type;
   }
 
   public String getSecret() {
     return secret;
+  }
+
+  public Map<String, String> getSettings() {
+    return settings;
   }
 
   public boolean isEnabled() {

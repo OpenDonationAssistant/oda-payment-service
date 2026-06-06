@@ -3,7 +3,6 @@ package io.github.opendonationassistant.gateway;
 import io.github.opendonationassistant.commons.Amount;
 import io.micronaut.serde.annotation.Serdeable;
 import java.util.concurrent.CompletableFuture;
-
 import org.jspecify.annotations.Nullable;
 
 public interface Gateway {
@@ -15,7 +14,8 @@ public interface Gateway {
     YOOMONEY,
     ROBOKASSA,
     FAKE,
-    CRYPTOCLOUD;
+    CRYPTOCLOUD,
+    RAHMAT;
 
     public static Type from(String type) {
       return switch (type) {
@@ -23,6 +23,7 @@ public interface Gateway {
         case "yoomoney" -> Type.YOOMONEY;
         case "cryptocloud" -> Type.CRYPTOCLOUD;
         case "fake" -> Type.FAKE;
+        case "rahmat" -> Type.RAHMAT;
         default -> Type.YOOKASSA;
       };
     }

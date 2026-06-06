@@ -46,6 +46,7 @@ public class GatewaysTest {
       "gateway",
       "secret",
       "fiat",
+      Map.of(),
       false
     );
     setGateway.setGateway(auth, createGatewayCommand);

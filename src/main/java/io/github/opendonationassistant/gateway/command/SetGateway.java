@@ -68,6 +68,7 @@ public class SetGateway extends BaseController {
       command.token(),
       command.gateway(),
       command.secret(),
+      command.settings(),
       command.type(),
       command.enabled()
     );
@@ -109,6 +110,7 @@ public class SetGateway extends BaseController {
     String gateway,
     String secret,
     String type,
+    Map<String, String> settings,
     boolean enabled
   ) {}
 }

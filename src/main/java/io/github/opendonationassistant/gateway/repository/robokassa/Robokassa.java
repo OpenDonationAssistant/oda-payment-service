@@ -78,6 +78,6 @@ public class Robokassa implements Gateway {
 
   @Override
   public CompletableFuture<String> status(String gatewayId) {
-    return CompletableFuture.supplyAsync(() -> "completed");
+    return CompletableFuture.completedFuture("completed");
   }
 }

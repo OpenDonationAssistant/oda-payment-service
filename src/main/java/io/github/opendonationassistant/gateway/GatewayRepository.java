@@ -1,9 +1,12 @@
 package io.github.opendonationassistant.gateway;
 
+import io.github.opendonationassistant.conversion.ConversionService;
 import io.github.opendonationassistant.gateway.repository.GatewayCredentialsDataRepository;
 import io.github.opendonationassistant.gateway.repository.cryptocloud.CryptoCloud;
 import io.github.opendonationassistant.gateway.repository.cryptocloud.CryptoCloudClient;
 import io.github.opendonationassistant.gateway.repository.fake.FakeGateway;
+import io.github.opendonationassistant.gateway.repository.rahmat.Rahmat;
+import io.github.opendonationassistant.gateway.repository.rahmat.RahmatClient;
 import io.github.opendonationassistant.gateway.repository.robokassa.Robokassa;
 import io.github.opendonationassistant.gateway.repository.robokassa.RobokassaClient;
 import io.github.opendonationassistant.gateway.repository.yookassa.YooKassa;
@@ -24,12 +27,16 @@ public class GatewayRepository {
   private final HttpClient yoomoneyHttpClient;
   private final Executor executor;
   private final CryptoCloudClient cryptoCloudClient;
+  private final RahmatClient rahmatClient;
+  private final ConversionService conversion;
 
   public GatewayRepository(
     GatewayCredentialsDataRepository credProvider,
     YooKassaClient yooKassaClient,
     RobokassaClient robokassaClient,
     CryptoCloudClient cryptoCloudClient,
+    RahmatClient rahmatClient,
+    ConversionService conversionService,
     @Client("fundraising") HttpClient httpClient
   ) {
     this.credentialsProvider = credProvider;
@@ -37,6 +44,8 @@ public class GatewayRepository {
     this.robokassaClient = robokassaClient;
     this.yoomoneyHttpClient = httpClient;
     this.cryptoCloudClient = cryptoCloudClient;
+    this.rahmatClient = rahmatClient;
+    this.conversion = conversionService;
     this.executor = Executors.newFixedThreadPool(4);
   }
 
@@ -64,6 +73,16 @@ public class GatewayRepository {
         return new YooMoney(shopId, recipientId, yoomoneyHttpClient, executor);
       case FAKE:
         return new FakeGateway();
+      case RAHMAT:
+        return new Rahmat(
+          rahmatClient,
+          conversion,
+          cred.getSettings().getOrDefault("appId", ""),
+          cred.getSettings().getOrDefault("appSecret", ""),
+          cred.getSettings().getOrDefault("mxik", ""),
+          cred.getSettings().getOrDefault("packageCode", ""),
+          Long.parseLong(shopId)
+        );
       default:
         return new YooKassa(shopId, shopToken, yooKassaClient);
     }

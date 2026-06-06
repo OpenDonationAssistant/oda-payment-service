@@ -5,3 +5,11 @@ logger:
   levels:
     io.micronaut.http.client: TRACE
     io.github.opendonationassistant: DEBUG
+micronaut:
+  security:
+    token:
+      jwt:
+        signatures:
+          jwks:
+            keycloak:
+              url: http://keycloak/realms/ODA/protocol/openid-connect/certs
