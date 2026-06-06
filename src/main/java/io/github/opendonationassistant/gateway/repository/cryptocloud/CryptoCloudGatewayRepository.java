@@ -18,6 +18,10 @@ public class CryptoCloudGatewayRepository implements GatewayRepository {
 
   @Override
   public Gateway convert(GatewayCredentialsData data) {
-    return new CryptoCloud(cryptoCloudClient, data.getGatewayId(), data.getToken());
+    return new CryptoCloud(
+      cryptoCloudClient,
+      data.getGatewayId(),
+      data.getToken()
+    );
   }
 }
