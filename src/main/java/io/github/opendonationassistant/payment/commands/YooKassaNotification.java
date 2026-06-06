@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.integration.YooKassaClient.YooKassaPayment;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.annotation.Body;
@@ -25,12 +25,12 @@ public class YooKassaNotification {
   private Logger log = LoggerFactory.getLogger(YooKassaNotification.class);
 
   private final PaymentRepository payments;
-  private final GatewayRepository gateways;
+  private final AbstractGatewayRepository gateways;
 
   @Inject
   public YooKassaNotification(
     PaymentRepository payments,
-    GatewayRepository gateways
+    AbstractGatewayRepository gateways
   ) {
     this.payments = payments;
     this.gateways = gateways;

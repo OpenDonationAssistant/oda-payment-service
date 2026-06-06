@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.repository;
 
 import io.github.opendonationassistant.events.payments.PaymentFacade;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.wordblacklist.WordFilterRepository;
 import io.micronaut.serde.annotation.Serdeable;
 import java.util.concurrent.CompletableFuture;
@@ -34,7 +34,7 @@ public class Payment {
     }
   }
 
-  public CompletableFuture<Payment> complete(GatewayRepository gateways) {
+  public CompletableFuture<Payment> complete(AbstractGatewayRepository gateways) {
     return CompletableFuture.supplyAsync(() -> this);
   }
 

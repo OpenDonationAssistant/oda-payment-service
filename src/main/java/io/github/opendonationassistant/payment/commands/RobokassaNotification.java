@@ -1,7 +1,7 @@
 package io.github.opendonationassistant.payment.commands;
 
 import io.github.opendonationassistant.commons.ToString;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.payment.repository.PaymentRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
@@ -24,12 +24,12 @@ public class RobokassaNotification {
   private Logger log = LoggerFactory.getLogger(RobokassaNotification.class);
 
   private PaymentRepository payments;
-  private GatewayRepository gateways;
+  private AbstractGatewayRepository gateways;
 
   @Inject
   public RobokassaNotification(
     PaymentRepository payments,
-    GatewayRepository gateways
+    AbstractGatewayRepository gateways
   ) {
     this.payments = payments;
     this.gateways = gateways;

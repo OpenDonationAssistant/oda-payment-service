@@ -3,7 +3,7 @@ package io.github.opendonationassistant.payment.repository;
 import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.events.payments.PaymentEvent;
 import io.github.opendonationassistant.events.payments.PaymentFacade;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.integration.MediaService;
 import io.github.opendonationassistant.integration.MediaService.LinkPaymentCommand;
 import io.github.opendonationassistant.wordblacklist.WordFilter;
@@ -28,7 +28,7 @@ public class InitedPayment extends Payment {
     super(data, dataRepository, facade, wordFilterRepository);
   }
 
-  public CompletableFuture<Payment> complete(GatewayRepository gateways) {
+  public CompletableFuture<Payment> complete(AbstractGatewayRepository gateways) {
     log.info("Authorizing payment", Map.of("payment", this));
     final PaymentData payment = this.getData();
     return gateways

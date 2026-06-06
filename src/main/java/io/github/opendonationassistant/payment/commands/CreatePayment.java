@@ -3,7 +3,7 @@ package io.github.opendonationassistant.payment.commands;
 import io.github.opendonationassistant.commons.Amount;
 import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.gateway.Gateway.InitPaymentParams;
-import io.github.opendonationassistant.gateway.GatewayRepository;
+import io.github.opendonationassistant.gateway.AbstractGatewayRepository;
 import io.github.opendonationassistant.integration.ActionsService;
 import io.github.opendonationassistant.integration.MediaService;
 import io.github.opendonationassistant.integration.MediaService.LinkPaymentCommand;
@@ -30,14 +30,14 @@ public class CreatePayment {
 
   private final ODALogger log = new ODALogger(this);
 
-  private final GatewayRepository gateways;
+  private final AbstractGatewayRepository gateways;
   private final PaymentRepository payments;
   private final MediaService mediaService;
   private final ActionsService actionsService;
 
   @Inject
   public CreatePayment(
-    GatewayRepository gateways,
+    AbstractGatewayRepository gateways,
     PaymentRepository payments,
     MediaService mediaService,
     ActionsService actionsService
