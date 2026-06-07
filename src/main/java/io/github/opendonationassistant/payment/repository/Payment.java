@@ -35,7 +35,7 @@ public class Payment {
   }
 
   public CompletableFuture<Payment> complete(AbstractGatewayRepository gateways) {
-    return CompletableFuture.supplyAsync(() -> this);
+    return CompletableFuture.completedFuture(this);
   }
 
   public PaymentData getData() {

@@ -36,7 +36,7 @@ public class RahmatNotification {
   }
 
   @Post("/notification/rahmat")
-  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Consumes(MediaType.APPLICATION_JSON)
   @Secured(SecurityRule.IS_ANONYMOUS)
   @ExecuteOn(TaskExecutors.BLOCKING)
   @Operation(hidden = true)
