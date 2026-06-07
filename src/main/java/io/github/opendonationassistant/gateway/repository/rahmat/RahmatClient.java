@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Client("rahmat")
-@Header(value = "Content-Type", name = "application/json")
+@Header(name = "Content-Type", value = "application/json")
 public interface RahmatClient {
   @Post("/auth")
   public CompletableFuture<TokenResponse> getToken(@Body TokenRequest request);
