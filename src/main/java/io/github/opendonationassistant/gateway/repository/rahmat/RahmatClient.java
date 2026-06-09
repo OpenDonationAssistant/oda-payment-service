@@ -17,7 +17,7 @@ public interface RahmatClient {
 
   @Post("/payment/invoice")
   public CompletableFuture<ResponseWrapper<CreatedInvoice>> create(
-    @Header(name = "Authorization") String token,
+    @Header("Authorization") String token,
     @Body InvoiceRequest payment
   );
 

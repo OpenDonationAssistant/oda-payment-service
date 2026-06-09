@@ -1,14 +1,18 @@
 package io.github.opendonationassistant.gateway.repository.rahmat;
 
+import io.github.opendonationassistant.commons.logging.ODALogger;
 import io.github.opendonationassistant.conversion.ConversionService;
 import io.github.opendonationassistant.gateway.Gateway;
 import io.github.opendonationassistant.gateway.repository.rahmat.RahmatClient.InvoiceRequest;
 import io.github.opendonationassistant.gateway.repository.rahmat.RahmatClient.Ofd;
 import io.github.opendonationassistant.gateway.repository.rahmat.RahmatClient.TokenRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class Rahmat implements Gateway {
+
+  private final ODALogger log = new ODALogger(this);
 
   private final RahmatClient client;
   private final ConversionService conversion;
@@ -43,8 +47,9 @@ public class Rahmat implements Gateway {
     );
     return client
       .getToken(new TokenRequest(appId, appSecret))
-      .thenCompose(response ->
-        client.create(
+      .thenCompose(response -> {
+        log.info("Received Rahmat Token", Map.of("response", response));
+        return client.create(
           "Bearer %s".formatted(response.token()),
           new InvoiceRequest(
             storeId,
@@ -55,8 +60,8 @@ public class Rahmat implements Gateway {
             "https://api.oda.digital/notification/rahmat",
             List.of(new Ofd(1L, amount, mxik, amount, packageCode, "Донат"))
           )
-        )
-      )
+        );
+      })
       .thenApply(invoice ->
         new InitResponse(
           "rahmat",
