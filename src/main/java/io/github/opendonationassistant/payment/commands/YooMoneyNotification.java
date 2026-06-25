@@ -50,6 +50,6 @@ public class YooMoneyNotification {
       .flatMap(paymentId -> {
         return payments.getById((String) paymentId);
       })
-      .ifPresent(payment -> payment.complete(gateways));
+      .ifPresent(payment -> payment.complete(gateways).join());
   }
 }

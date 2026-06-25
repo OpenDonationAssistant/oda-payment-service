@@ -50,7 +50,7 @@ public class YooKassaNotification {
 
     payments
       .getByGatewayId(event.object().id())
-      .ifPresent(payment -> payment.complete(gateways));
+      .ifPresent(payment -> payment.complete(gateways).join());
   }
 
   @Serdeable
